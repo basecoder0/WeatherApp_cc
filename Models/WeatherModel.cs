@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace WeatherApp_cc.Models
 {
-    public class WeatherModel : Controller
+    public class WeatherModel
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
+        public string WeatherDescription { get; set; }
+        public string Temperature { get; set; }
+        public string City { get; set; }
+        public string State { get; set; }
+
     }
 }

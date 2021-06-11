@@ -5,13 +5,20 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using WeatherApp_cc.Services;
 using WeatherApp_cc.Models;
 
 namespace WeatherApp_cc.Controllers
 {
     public class HomeController : Controller
     {
+        private const string URL = "api.openweathermap.org/data/2.5/weather";
+        private const string apiKey = "&appid=72c5e00d2fd4a038784dcac1583135aa";
         private readonly ILogger<HomeController> _logger;
+
+        static WeatherModel weatherAtt = new WeatherModel();
+        WeatherServices iservice = new WeatherServices(URL, weatherAtt, apiKey);     
+        
 
         public HomeController(ILogger<HomeController> logger)
         {
