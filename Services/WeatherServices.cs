@@ -27,7 +27,7 @@ namespace WeatherApp_cc.Services
             this.key = key;        
         }
 
-        private string BuildApiRequest()
+        public string BuildApiRequest()
         {
             string qStr = "?q=";
             StringBuilder reqStr = new StringBuilder();

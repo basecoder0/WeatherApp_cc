@@ -12,13 +12,19 @@ namespace WeatherApp_cc.Controllers
 {
     public class HomeController : Controller
     {
-        private const string URL = "api.openweathermap.org/data/2.5/weather";
-        private const string apiKey = "&appid=72c5e00d2fd4a038784dcac1583135aa";
+        private const string _url = "api.openweathermap.org/data/2.5/weather";
+        private const string _apiKey = "&appid=72c5e00d2fd4a038784dcac1583135aa";
         private readonly ILogger<HomeController> _logger;
 
-        static WeatherModel weatherAtt = new WeatherModel();
-        WeatherServices iservice = new WeatherServices(URL, weatherAtt, apiKey);     
+        private static WeatherModel weatherAtt = new WeatherModel();
+        private WeatherServices service = new WeatherServices(_url, weatherAtt, _apiKey);     
         
+        private string getAPIInfo()
+        {
+            var apiInfo = service.BuildApiRequest();
+            return apiInfo;
+        }
+
 
         public HomeController(ILogger<HomeController> logger)
         {
