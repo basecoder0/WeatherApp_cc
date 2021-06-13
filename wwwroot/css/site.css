@@ -73,3 +73,7 @@ body {
 .top-buffer {
     margin-top: 30px;
 }
+
+#instruction{
+    color: red;
+}

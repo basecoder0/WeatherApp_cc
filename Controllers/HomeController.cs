@@ -12,20 +12,10 @@ namespace WeatherApp_cc.Controllers
 {
     public class HomeController : Controller
     {
-        private const string _url = "api.openweathermap.org/data/2.5/weather";
+        private const string _url = "https://api.openweathermap.org/data/2.5/";
         private const string _apiKey = "&appid=72c5e00d2fd4a038784dcac1583135aa";
         private readonly ILogger<HomeController> _logger;
-
-        private static WeatherModel weatherAtt = new WeatherModel();
-        private WeatherServices service = new WeatherServices(_url, weatherAtt, _apiKey);     
-        
-        private string getAPIInfo()
-        {
-            var apiInfo = service.BuildApiRequest();
-            return apiInfo;
-        }
-
-
+      
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
@@ -56,5 +46,21 @@ namespace WeatherApp_cc.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        [HttpGet]
+        public ActionResult GetWeather(WeatherModel model)
+        {                
+            var apiString = getAPIInfo(model);           
+            return View("~/Views/Home/Weather.cshtml");
+        }
+
+        private Rootobject getAPIInfo(WeatherModel weatherAtt)
+        {
+            WeatherServices service = new WeatherServices(_url, weatherAtt, _apiKey);
+            var requestStr = service.BuildApiRequest();
+            var json = service.getWeatherApi(requestStr);
+            return json;
+        }
+
     }
 }

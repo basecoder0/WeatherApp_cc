@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Threading.Tasks;
+using System.Text.Json;
 using WeatherApp_cc.Models;
+using RestSharp;
+using Newtonsoft.Json;
 
 namespace WeatherApp_cc.Services
 {
@@ -29,12 +33,29 @@ namespace WeatherApp_cc.Services
 
         public string BuildApiRequest()
         {
-            string qStr = "?q=";
+            string requestStr = "";
+            string qStr = "weather?q=";
             StringBuilder reqStr = new StringBuilder();
-            reqStr.AppendFormat(baseUrl, qStr, query, key);
+            reqStr.AppendFormat(requestStr +"{0}{1}{2}", qStr, query, key);
             return reqStr.ToString();
         }
 
-        // Create method to return JSON object 
+        public Rootobject getWeatherApi(string requestString)
+        {
+            var client = new RestClient(baseUrl);
+            var request = new RestRequest(requestString);
+            var response = client.Execute(request);
+
+            Rootobject result = null;
+
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                string rawResponse = response.Content;
+                result = JsonConvert.DeserializeObject<Rootobject>(rawResponse);                
+            }
+
+            return result;
+        }
+        
     }
 }

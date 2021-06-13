@@ -1,13 +1,37 @@
-﻿@{
+﻿@model WeatherApp_cc.Models.WeatherModel
+@{
     ViewData["Title"] = "Weather";
 }
-<form>
-    <button class="btn btn-primary" type="submit">Add</button>
-    <button class="btn btn-secondary" type="submit">Delete</button>   
+@using (Html.BeginForm("GetWeather", "Home", FormMethod.Get))
+{
+    <form>
+        <div class="top-buffer">
+            <button class="btn btn-primary" type="submit">Add</button>
+            <button class="btn btn-secondary" type="submit">Delete</button>
+            <button class="btn btn-secondary" type="submit" formmethod="get">Test Api </button>
+        </div>
+        <div class="top-buffer">
+            <div class="text-center">
+                <p id="instruction">To look up the weather in a specific City or State please entire in the information below</p>
+            </div>
+            <div class="form-row">
+                <div class="col-md-6 mb-3">
+                    @Html.LabelFor(m => m.City)
+                    @Html.TextBoxFor(m => m.City, new { @class = "form-control", @placeholder = "City" })
+                    @Html.ValidationMessageFor(m => m.City)
+                </div>
+                <div class="col-md-6 mb-3">
+                    @Html.LabelFor(m => m.State)
+                    @Html.TextBoxFor(m => m.State, new { @class = "form-control", @placeholder = "State" })
+                </div>
+            </div>
+        </div>
+    </form>
+}
+<div class="top-buffer">
     <table class="table align-middle">
         <thead>
             <tr>
-                <th scope="col">#</th>
                 <th scope="col">User Name</th>
                 <th scope="col">City</th>
                 <th scope="col">State</th>
@@ -15,4 +39,5 @@
             </tr>
         </thead>
     </table>
-</form>
+</div>
+
