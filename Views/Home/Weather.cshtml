@@ -1,4 +1,4 @@
-﻿@model WeatherApp_cc.Models.WeatherModel
+﻿@model WeatherApp_cc.Models.Rootobject
 @{
     ViewData["Title"] = "Weather";
 }
@@ -16,28 +16,46 @@
             </div>
             <div class="form-row">
                 <div class="col-md-6 mb-3">
-                    @Html.LabelFor(m => m.City)
-                    @Html.TextBoxFor(m => m.City, new { @class = "form-control", @placeholder = "City" })
-                    @Html.ValidationMessageFor(m => m.City)
+                    @Html.LabelFor(m => m.weather[0].City)
+                    @Html.TextBoxFor(m => m.weather[0].City, new { @class = "form-control", @placeholder = "City" })
+                    @Html.ValidationMessageFor(m => m.weather[4].City)
                 </div>
                 <div class="col-md-6 mb-3">
-                    @Html.LabelFor(m => m.State)
-                    @Html.TextBoxFor(m => m.State, new { @class = "form-control", @placeholder = "State" })
+                    @Html.LabelFor(m => m.weather[0].State)
+                    @Html.TextBoxFor(m => m.weather[0].State, new { @class = "form-control", @placeholder = "State" })
                 </div>
             </div>
         </div>
     </form>
 }
+@{
+    var data = (Rootobject)ViewData["WeatherAtt"];
+}
+
 <div class="top-buffer">
     <table class="table align-middle">
         <thead>
             <tr>
-                <th scope="col">User Name</th>
                 <th scope="col">City</th>
                 <th scope="col">State</th>
                 <th scope="col">Temp</th>
+                <th scope="col">Weather Description</th>
             </tr>
         </thead>
+        <tbody>
+            @{
+
+                if (data != null)
+                {
+                    <tr>
+                        <td>@data.name</td>
+                        <td>@data.weather[0].State</td>
+                        <td>@data.main.temp.ToString("00.000")</td>
+                        <td>@data.weather[0].description</td>
+                    </tr>
+                }
+            }
+        </tbody>
     </table>
 </div>
 

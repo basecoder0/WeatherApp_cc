@@ -10,7 +10,7 @@ namespace WeatherApp_cc.Models
     public class Rootobject
     {
         public Coord coord { get; set; }
-        public WeatherModel[] weather { get; set; }
+        public Weather[] weather { get; set; }
         public string _base { get; set; }
         public Main main { get; set; }
         public int visibility { get; set; }
@@ -32,7 +32,7 @@ namespace WeatherApp_cc.Models
 
     public class Main
     {
-        public float temp { get; set; }
+        public double temp { get; set; }
         public float feels_like { get; set; }
         public float temp_min { get; set; }
         public float temp_max { get; set; }
@@ -61,7 +61,7 @@ namespace WeatherApp_cc.Models
         public int sunset { get; set; }
     }
 
-    public class WeatherModel
+    public class Weather
     {
         public int id { get; set; }
         public string main { get; set; }
@@ -75,4 +75,35 @@ namespace WeatherApp_cc.Models
         [Display(Name = "State")]
         public string State { get; set; }
     }
+
+
+    //public class WeatherModel
+    //{
+    //    public int id { get; set; }
+    //    public string main { get; set; }
+    //    public string description { get; set; }
+    //    public string icon { get; set; }
+    //    [Required]
+    //    [Display(Name = "City")]
+    //    public string City { get; set; }
+    //    [Display(Name = "State")]
+    //    public string State { get; set; }
+    //    public int type { get; set; }
+    //    public float message { get; set; }
+    //    public string country { get; set; }
+    //    public int sunrise { get; set; }
+    //    public int sunset { get; set; }
+    //    public int all { get; set; }
+    //    public float speed { get; set; }
+    //    public int deg { get; set; }
+    //    public float temp { get; set; }
+    //    public float feels_like { get; set; }
+    //    public float temp_min { get; set; }
+    //    public float temp_max { get; set; }
+    //    public int pressure { get; set; }
+    //    public int humidity { get; set; }
+    //    public float lon { get; set; }
+    //    public float lat { get; set; }
+    //}
+
 }

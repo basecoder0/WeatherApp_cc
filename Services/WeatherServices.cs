@@ -17,15 +17,15 @@ namespace WeatherApp_cc.Services
         private string query;
         private string key;
 
-        public WeatherServices(string baseUrl, WeatherModel model, string key)
+        public WeatherServices(string baseUrl, Rootobject model, string key)
         {
 
-            if (model.City != "" && model.State != "")
-                this.query = model.City + "," + model.State;
-            else if (model.City != "")
-                this.query = model.City;
-            else if (model.State != "")
-                this.query = model.State;
+            if (model.weather[0].City != "" && model.weather[0].State != "")
+                this.query = model.weather[0].City + "," + model.weather[0].State;
+            else if (model.weather[0].City != "")
+                this.query = model.weather[0].City;
+            else if (model.weather[0].State != "")
+                this.query = model.weather[0].State;
 
             this.baseUrl = baseUrl;            
             this.key = key;        
@@ -53,8 +53,13 @@ namespace WeatherApp_cc.Services
                 string rawResponse = response.Content;
                 result = JsonConvert.DeserializeObject<Rootobject>(rawResponse);                
             }
-
             return result;
+        }
+
+        public double KelvinToFahrenheit(double temp)
+        {
+            double fahrenheit = ((temp-273.15)*9/5)+32;
+            return fahrenheit;
         }
         
     }
