@@ -50,10 +50,14 @@ namespace WeatherApp_cc.Controllers
         [HttpGet]
         public ActionResult GetWeather(Rootobject model)
         {
+
             var apiString = getAPIInfo(model);
             apiString.weather[0].State = model.weather[0].State;
             apiString.main.temp = service.KelvinToFahrenheit(apiString.main.temp);
             ViewData["WeatherAtt"] = apiString;
+
+            //Work on elegant error handling
+
             return View("~/Views/Home/Weather.cshtml");
         }
 
@@ -63,7 +67,7 @@ namespace WeatherApp_cc.Controllers
             var requestStr = service.BuildApiRequest();
             var json = service.getWeatherApi(requestStr);
             return json;
-        }
 
+        }
     }
 }

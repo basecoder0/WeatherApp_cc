@@ -22,6 +22,7 @@ namespace WeatherApp_cc.Models
         public int id { get; set; }
         public string name { get; set; }
         public int cod { get; set; }
+        public string ErrorMessage { get; set; }
     }
 
     public class Coord
@@ -67,43 +68,11 @@ namespace WeatherApp_cc.Models
         public string main { get; set; }
         public string description { get; set; }
         public string icon { get; set; }
-
         [Required]
         [Display(Name = "City")]
         public string City { get; set; }
-
         [Display(Name = "State")]
         public string State { get; set; }
     }
-
-
-    //public class WeatherModel
-    //{
-    //    public int id { get; set; }
-    //    public string main { get; set; }
-    //    public string description { get; set; }
-    //    public string icon { get; set; }
-    //    [Required]
-    //    [Display(Name = "City")]
-    //    public string City { get; set; }
-    //    [Display(Name = "State")]
-    //    public string State { get; set; }
-    //    public int type { get; set; }
-    //    public float message { get; set; }
-    //    public string country { get; set; }
-    //    public int sunrise { get; set; }
-    //    public int sunset { get; set; }
-    //    public int all { get; set; }
-    //    public float speed { get; set; }
-    //    public int deg { get; set; }
-    //    public float temp { get; set; }
-    //    public float feels_like { get; set; }
-    //    public float temp_min { get; set; }
-    //    public float temp_max { get; set; }
-    //    public int pressure { get; set; }
-    //    public int humidity { get; set; }
-    //    public float lon { get; set; }
-    //    public float lat { get; set; }
-    //}
 
 }
