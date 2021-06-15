@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Text.Json;
 using WeatherApp_cc.Models;
+using WeatherApp_cc.Repository;
 using RestSharp;
 using Newtonsoft.Json;
 
@@ -16,6 +17,7 @@ namespace WeatherApp_cc.Services
         private string baseUrl;
         private string query;
         private string key;
+        WeatherAppRepo repo = null;
 
         public WeatherServices(string baseUrl, Rootobject model, string key)
         {
@@ -40,7 +42,7 @@ namespace WeatherApp_cc.Services
             return reqStr.ToString();
         }
 
-        public Rootobject getWeatherApi(string requestString)
+        public Rootobject GetWeatherApi(string requestString)
         {
             var client = new RestClient(baseUrl);
             var request = new RestRequest(requestString);
@@ -62,5 +64,10 @@ namespace WeatherApp_cc.Services
             return fahrenheit;
         }
         
+        public string InsertUserInfo(SignUpModel userInfo)
+        {
+            string message;
+            return message = repo.InsertUserInfo(userInfo);
+        }
     }
 }

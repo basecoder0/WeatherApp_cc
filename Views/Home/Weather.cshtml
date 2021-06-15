@@ -2,6 +2,16 @@
 @{
     ViewData["Title"] = "Weather";
 }
+
+@*@if (ViewData["Success"] != null)
+{
+<div>ViewData["Success"]</div>
+}
+else
+{
+<div>ViewData["Success"]</div>
+}*@
+
 @using (Html.BeginForm("GetWeather", "Home", FormMethod.Get))
 {
     <form>
@@ -18,7 +28,7 @@
                 <div class="col-md-6 mb-3">
                     @Html.LabelFor(m => m.weather[0].City)
                     @Html.TextBoxFor(m => m.weather[0].City, new { @class = "form-control", @placeholder = "City" })
-                    @Html.ValidationMessageFor(m => m.weather[4].City)
+                    @Html.ValidationMessageFor(m => m.weather[0].City)
                 </div>
                 <div class="col-md-6 mb-3">
                     @Html.LabelFor(m => m.weather[0].State)

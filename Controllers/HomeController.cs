@@ -16,6 +16,7 @@ namespace WeatherApp_cc.Controllers
         private const string _apiKey = "&appid=72c5e00d2fd4a038784dcac1583135aa";
         private readonly ILogger<HomeController> _logger;
         WeatherServices service = null;
+       
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
@@ -51,7 +52,7 @@ namespace WeatherApp_cc.Controllers
         public ActionResult GetWeather(Rootobject model)
         {
 
-            var apiString = getAPIInfo(model);
+            var apiString = GetAPIInfo(model);
             apiString.weather[0].State = model.weather[0].State;
             apiString.main.temp = service.KelvinToFahrenheit(apiString.main.temp);
             ViewData["WeatherAtt"] = apiString;
@@ -60,14 +61,35 @@ namespace WeatherApp_cc.Controllers
 
             return View("~/Views/Home/Weather.cshtml");
         }
-
-        private Rootobject getAPIInfo(Rootobject weatherAtt)
+              
+        private Rootobject GetAPIInfo(Rootobject weatherAtt)
         {
             service = new WeatherServices(_url, weatherAtt, _apiKey);
             var requestStr = service.BuildApiRequest();
-            var json = service.getWeatherApi(requestStr);
+            var json = service.GetWeatherApi(requestStr);
             return json;
 
         }
+
+        [HttpPost]
+        public ActionResult PostUserInfo(SignUpModel userInfo)
+        {
+            string message;
+            message = service.InsertUserInfo(userInfo);
+            if(message != "Success")
+            {
+                ViewData["Message"] = message;
+                return View("~/Views/Home/Weather.cshtml");
+            }
+            else
+            {
+                ViewData["Message"] = message;
+                return View("~/Views/Home/Weather.cshtml");
+
+            }
+            
+        }
+
+
     }
 }
