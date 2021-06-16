@@ -11,15 +11,15 @@ namespace WeatherApp_cc.Repository
 {
     public class WeatherAppRepo
     {
+        public WeatherAppRepo() { }
+        private const string myConnectionString = "server=aa1ge0iuetvkf6c.cpuwmmcmrvhq.us-east-2.rds.amazonaws.com; port=3306; database=ebdb; uid=Roah7791; pwd=gK8bqd!eSw7NheA; database=ebdb";
         public string  InsertUserInfo(SignUpModel userInfo)
         {
-            MySql.Data.MySqlClient.MySqlConnection conn;
-            MySql.Data.MySqlClient.MySqlCommand command;
+            MySqlConnection conn = null;
+            MySqlCommand command = null;          
 
-            string myConnectionString = ConfigurationManager.ConnectionStrings["awsDB"].ConnectionString;
-
-            conn = new MySql.Data.MySqlClient.MySqlConnection();
-            command = new MySql.Data.MySqlClient.MySqlCommand();
+            conn = new MySqlConnection();
+            command = new MySqlCommand();
 
             conn.ConnectionString = myConnectionString;
             try
@@ -39,13 +39,58 @@ namespace WeatherApp_cc.Repository
 
                 command.ExecuteNonQuery();
             }
-            catch(MySql.Data.MySqlClient.MySqlException ex)
-            {
-                return ex.ToString();
+            catch(MySqlException ex)
+            {                
+                return ex.Message.ToString();
             }
             conn.Close();
             string success = "Success";
             return success;
+        }
+
+        public string GetUserCredentials(IndexModel userInfo)
+        {
+            bool exists = false;
+            string message = "";
+
+            MySqlConnection conn = null;
+            MySqlCommand command = null;
+
+            conn = new MySqlConnection();
+            command = new MySqlCommand();
+
+            conn.ConnectionString = myConnectionString;
+            try
+            {
+                conn.Open();
+                command.Connection = conn;
+
+                command.CommandText = "GetUserCredentials";
+                command.CommandType = System.Data.CommandType.StoredProcedure;
+
+                command.Parameters.AddWithValue("@u_Name", userInfo.UserName);
+               
+                var result = command.ExecuteScalar();
+                if(Convert.ToInt16(result) > 0)
+                {
+                    exists = true;
+                }
+            }
+            catch (MySqlException ex)
+            {
+                return ex.Message.ToString();
+            }
+            conn.Close();
+            
+            if(exists == true)
+            {
+                return message = String.Format("Welcome {0}", userInfo.UserName);                
+            }
+            else
+            {                
+                return message = "Please enter a valid user name";
+            }           
+
         }
     }
 }

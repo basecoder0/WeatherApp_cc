@@ -3,14 +3,12 @@
     ViewData["Title"] = "Weather";
 }
 
-@*@if (ViewData["Success"] != null)
+@if (ViewData["Login"] == "Success")
 {
-<div>ViewData["Success"]</div>
+    <div class="form-row">
+        <div class="text-success">@ViewData["Message"].ToString()</div><br><br>
+    </div>
 }
-else
-{
-<div>ViewData["Success"]</div>
-}*@
 
 @using (Html.BeginForm("GetWeather", "Home", FormMethod.Get))
 {

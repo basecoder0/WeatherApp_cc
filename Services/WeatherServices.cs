@@ -18,6 +18,8 @@ namespace WeatherApp_cc.Services
         private string query;
         private string key;
         WeatherAppRepo repo = null;
+        public WeatherServices() { }
+        private string message = "";
 
         public WeatherServices(string baseUrl, Rootobject model, string key)
         {
@@ -66,8 +68,15 @@ namespace WeatherApp_cc.Services
         
         public string InsertUserInfo(SignUpModel userInfo)
         {
-            string message;
+            
+            repo = new WeatherAppRepo();
             return message = repo.InsertUserInfo(userInfo);
+        }
+
+        public string GetUserCredentials(IndexModel userInfo)
+        {
+            repo = new WeatherAppRepo();
+            return message = repo.GetUserCredentials(userInfo);
         }
     }
 }

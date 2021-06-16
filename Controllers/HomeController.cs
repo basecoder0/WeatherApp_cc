@@ -15,6 +15,7 @@ namespace WeatherApp_cc.Controllers
         private const string _url = "https://api.openweathermap.org/data/2.5/";
         private const string _apiKey = "&appid=72c5e00d2fd4a038784dcac1583135aa";
         private readonly ILogger<HomeController> _logger;
+        private string message ="";
         WeatherServices service = null;
        
         public HomeController(ILogger<HomeController> logger)
@@ -32,8 +33,12 @@ namespace WeatherApp_cc.Controllers
             return View();
         }
 
-        public IActionResult Weather()
+        public IActionResult Weather(IndexModel userInfo)        
         {
+            if(userInfo.UserName == null)
+            {
+               return Redirect("Index");
+            }
             return View();
         }
 
@@ -51,14 +56,11 @@ namespace WeatherApp_cc.Controllers
         [HttpGet]
         public ActionResult GetWeather(Rootobject model)
         {
-
             var apiString = GetAPIInfo(model);
             apiString.weather[0].State = model.weather[0].State;
             apiString.main.temp = service.KelvinToFahrenheit(apiString.main.temp);
             ViewData["WeatherAtt"] = apiString;
-
             //Work on elegant error handling
-
             return View("~/Views/Home/Weather.cshtml");
         }
               
@@ -68,28 +70,42 @@ namespace WeatherApp_cc.Controllers
             var requestStr = service.BuildApiRequest();
             var json = service.GetWeatherApi(requestStr);
             return json;
-
         }
 
         [HttpPost]
         public ActionResult PostUserInfo(SignUpModel userInfo)
-        {
-            string message;
+        {           
+            service = new WeatherServices();
             message = service.InsertUserInfo(userInfo);
             if(message != "Success")
             {
                 ViewData["Message"] = message;
-                return View("~/Views/Home/Weather.cshtml");
+                return View("~/Views/Home/SignUp.cshtml");
             }
             else
             {
                 ViewData["Message"] = message;
                 return View("~/Views/Home/Weather.cshtml");
-
-            }
-            
+            }            
         }
 
+        [HttpGet]
+        public ActionResult GetUserCredentials(IndexModel userInfo)
+        {
+            service = new WeatherServices();
+            message = service.GetUserCredentials(userInfo);
+            if (!message.Contains("Welcome"))
+            {
+                ViewData["Message"] = message;
+                return View("Index");
+            }
+            else
+            {
+                ViewData["Login"] = "Success";
+                ViewData["Message"] = message;
+                return View("~/Views/Home/Weather.cshtml");
+            }
+        }
 
     }
 }

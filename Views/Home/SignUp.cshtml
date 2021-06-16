@@ -2,6 +2,14 @@
 @{
     ViewData["Title"] = "Sign Up";
 }
+@if (ViewData["Message"] != null)
+{
+    <div class="form-row">
+        <div class="text-danger">@ViewData["Message"].ToString()</div><br><br>
+    </div>
+}
+
+
 @using (Html.BeginForm("PostUserInfo", "Home", FormMethod.Post))
 {
     <form>
