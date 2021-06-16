@@ -9,6 +9,7 @@ using WeatherApp_cc.Models;
 using WeatherApp_cc.Repository;
 using RestSharp;
 using Newtonsoft.Json;
+using System.Data;
 
 namespace WeatherApp_cc.Services
 {
@@ -20,6 +21,7 @@ namespace WeatherApp_cc.Services
         WeatherAppRepo repo = null;
         public WeatherServices() { }
         private string message = "";
+        private DataTable dt = null;
 
         public WeatherServices(string baseUrl, Rootobject model, string key)
         {
@@ -42,7 +44,7 @@ namespace WeatherApp_cc.Services
             StringBuilder reqStr = new StringBuilder();
             reqStr.AppendFormat(requestStr +"{0}{1}{2}", qStr, query, key);
             return reqStr.ToString();
-        }
+        }        
 
         public Rootobject GetWeatherApi(string requestString)
         {
@@ -55,28 +57,47 @@ namespace WeatherApp_cc.Services
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 string rawResponse = response.Content;
-                result = JsonConvert.DeserializeObject<Rootobject>(rawResponse);                
+                result = JsonConvert.DeserializeObject<Rootobject>(rawResponse);
             }
             return result;
-        }
-
-        public double KelvinToFahrenheit(double temp)
-        {
-            double fahrenheit = ((temp-273.15)*9/5)+32;
-            return fahrenheit;
-        }
-        
-        public string InsertUserInfo(SignUpModel userInfo)
-        {
-            
-            repo = new WeatherAppRepo();
-            return message = repo.InsertUserInfo(userInfo);
         }
 
         public string GetUserCredentials(IndexModel userInfo)
         {
             repo = new WeatherAppRepo();
-            return message = repo.GetUserCredentials(userInfo);
+            return  repo.GetUserCredentials(userInfo);
         }
+
+        public string GetUserId(string userName)
+        {
+            repo = new WeatherAppRepo();
+            return repo.GetUserId(userName);
+        }
+
+        public List<WeatherInfoModel> GetWeatherInfo(int userId)
+        {
+            repo = new WeatherAppRepo();
+            return repo.GetWeatherInfo(userId);
+        }
+
+        public string InsertUserInfo(SignUpModel userInfo)
+        {            
+            repo = new WeatherAppRepo();
+            return repo.InsertUserInfo(userInfo);
+        }
+
+        public void InsertWeatherInfo(Rootobject model)
+        {
+            repo = new WeatherAppRepo();
+            repo.InsertWeatherInfo(model);
+        }
+
+        public string KelvinToFahrenheit(double temp)
+        {
+            double fahrenheit = ((temp - 273.15) * 9 / 5) + 32;
+
+            return fahrenheit.ToString("00");
+        }
+
     }
 }

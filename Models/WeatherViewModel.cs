@@ -9,6 +9,9 @@ namespace WeatherApp_cc.Models
 {
     public class Rootobject
     {
+        public List<WeatherInfoModel> weatherInfo { get; set; }
+        public int user_id { get; set; }
+        public string userName { get; set; }
         public Coord coord { get; set; }
         public Weather[] weather { get; set; }
         public string _base { get; set; }
@@ -75,4 +78,5 @@ namespace WeatherApp_cc.Models
         public string State { get; set; }
     }
 
+    
 }

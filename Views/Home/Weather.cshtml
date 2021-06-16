@@ -1,4 +1,5 @@
 ﻿@model WeatherApp_cc.Models.Rootobject
+
 @{
     ViewData["Title"] = "Weather";
 }
@@ -6,18 +7,16 @@
 @if (ViewData["Login"] != null)
 {
     <div class="form-row">
-        <div class="text-success">@ViewData["Message"].ToString()</div><br><br>
+        <div class="text-success"> Welcome @ViewData["UserName"].ToString()</div><br><br>
     </div>
 }
-
-
 
 <div class="container">
     <div class="text-center">
         <h1> Insert Some Header Text ¯\_(ツ)_/¯</h1>
     </div>
     <div class="top-buffer">
-        @using (Html.BeginForm("GetWeather","Home", FormMethod.Get, new { id = "weatherForm" }))
+        @using (Html.BeginForm("GetWeather", "Home", FormMethod.Get, new { id = "weatherForm" }))
         {
             <form>
                 <div class="form-row">
@@ -34,6 +33,7 @@
                         <button class="btn btn-md btn-success" id="addBtn" type="button">+ Add New Location</button>
                     </div>
                 </div>
+                @Html.HiddenFor(m => m.userName, new { id = "userName", Value = @ViewData["UserName"].ToString() })
             </form>
         }
     </div>
@@ -52,14 +52,13 @@
                 </tr>
             </thead>
             <tbody id="weatherBody">
-                @{
-                    if (data != null)
+                @foreach(var items in Model.weatherInfo)
                     {
                         <tr>
-                            <td>@data.name</td>
-                            <td>@data.weather[0].State</td>
-                            <td>@data.main.temp.ToString("00\u00B0F")</td>
-                            <td>@data.weather[0].description</td>
+                            <td>@items.City</td>
+                            <td>@items.State</td>
+                            <td>@items.Temperature.ToString("00\u00B0F")</td>
+                            <td>@items.Description</td>
                             <td>
                                 <span class="table-remove">
                                     <button id="dltBtn" class="btn btn-danger btn-rounded btn-sm my-0y" type="submit">Delete</button>
@@ -67,22 +66,22 @@
                             </td>
                         </tr>
                     }
-                }
+                
             </tbody>
         </table>
     </div>
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script type="text/javascript">      
-    $(document).ready(function () {      
+<script type="text/javascript">
+    $(document).ready(function () {
         $("#addBtn").click(function () {
             var model = $("#weatherForm").serialize()
             $.ajax({
                 url: '/Home/GetWeather',
                 type: 'GET',
                 cache: false,
-                data: model ,
+                data: model,
                 success: function (model) {
                     if (model != null) {
                         var row = "";
@@ -93,7 +92,7 @@
                     }
                     row += "<tr><td>" + name + "</td><td>" + state + "</td><td>" + temp + "</td><td>" + description + "</td><td> <span class='table-remove'> <button id='dltBtn' class='btn btn-danger btn-rounded btn-sm my-0y' type='submit'>Delete</button></span></td></tr>"
                     $('#weatherBody').append(row)
-                }                    
+                }
             })
         })
     });

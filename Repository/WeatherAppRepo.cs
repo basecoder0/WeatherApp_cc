@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using WeatherApp_cc.Models;
@@ -13,6 +14,120 @@ namespace WeatherApp_cc.Repository
     {
         public WeatherAppRepo() { }
         private const string myConnectionString = "server=aa1ge0iuetvkf6c.cpuwmmcmrvhq.us-east-2.rds.amazonaws.com; port=3306; database=ebdb; uid=Roah7791; pwd=gK8bqd!eSw7NheA; database=ebdb";
+
+        public string GetUserCredentials(IndexModel userInfo)
+        {
+            bool exists = false;
+            string message = "";
+
+            MySqlConnection conn = null;
+            MySqlCommand command = null;
+
+            conn = new MySqlConnection();
+            command = new MySqlCommand();
+
+            conn.ConnectionString = myConnectionString;
+            try
+            {
+                conn.Open();
+                command.Connection = conn;
+                command.CommandText = "GetUserCredentials";
+                command.CommandType = System.Data.CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@u_Name", userInfo.UserName);
+
+                var result = command.ExecuteScalar();
+                if (Convert.ToInt16(result) > 0)
+                {
+                    exists = true;
+                }
+            }
+            catch (MySqlException ex)
+            {
+                return ex.Message.ToString();
+            }
+            conn.Close();
+
+            if (exists == true)
+            {
+                return message = userInfo.UserName;
+            }
+            else
+            {
+                return message = "Please enter a valid user name";
+            }
+        }
+
+        public string GetUserId(string userName)
+        {
+            DataTable dt = new DataTable();
+            string userId = "";
+            MySqlConnection conn = null;
+            MySqlCommand command = null;
+
+            conn = new MySqlConnection();
+            command = new MySqlCommand();
+
+            conn.ConnectionString = myConnectionString;
+            try
+            {
+                conn.Open();
+                command.Connection = conn;
+                command.CommandText = "GetUserId";
+                command.CommandType = System.Data.CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@u_Name", userName);
+              
+                dt.Load(command.ExecuteReader());
+                if(dt.Rows.Count > 0)
+                {
+                    userId = dt.Rows[0]["UserId"].ToString();
+                }               
+                
+            }
+            catch (MySqlException ex)
+            {
+                return ex.Message.ToString();
+            }
+            conn.Close();
+            return userId;
+        }
+
+        public List<WeatherInfoModel> GetWeatherInfo(int userId)
+        {
+            List<WeatherInfoModel> weatherInfo = new List<WeatherInfoModel>();
+            DataTable dt = new DataTable();            
+            MySqlConnection conn = null;
+            MySqlCommand command = null;           
+            conn = new MySqlConnection();
+            command = new MySqlCommand();
+
+            conn.ConnectionString = myConnectionString;
+            try
+            {
+                conn.Open();
+                command.Connection = conn;
+                command.CommandText = "GetWeatherInfo";
+                command.CommandType = System.Data.CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@u_id", userId);               
+                command.ExecuteNonQuery();
+               
+                dt.Load(command.ExecuteReader());
+                if (dt.Rows.Count > 0)
+                {
+                    weatherInfo = CommonMethod.ConvertToList<WeatherInfoModel>(dt);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (MySqlException ex)
+            {
+                 ex.Message.ToString();
+            }
+            conn.Close();
+            return weatherInfo;
+        }
+
         public string  InsertUserInfo(SignUpModel userInfo)
         {
             MySqlConnection conn = null;
@@ -47,11 +162,8 @@ namespace WeatherApp_cc.Repository
             return success;
         }
 
-        public string GetUserCredentials(IndexModel userInfo)
+        public void InsertWeatherInfo(Rootobject model)
         {
-            bool exists = false;
-            string message = "";
-
             MySqlConnection conn = null;
             MySqlCommand command = null;
 
@@ -63,30 +175,23 @@ namespace WeatherApp_cc.Repository
             {
                 conn.Open();
                 command.Connection = conn;
-                command.CommandText = "GetUserCredentials";
+
+                command.CommandText = "InsertWeatherInfo";
                 command.CommandType = System.Data.CommandType.StoredProcedure;
-                command.Parameters.AddWithValue("@u_Name", userInfo.UserName);               
-                var result = command.ExecuteScalar();
-                if(Convert.ToInt16(result) > 0)
-                {
-                    exists = true;
-                }
+                command.Parameters.AddWithValue("@u_ID", model.user_id);
+                command.Parameters.AddWithValue("@city", model.weather[0].City);
+                command.Parameters.AddWithValue("@state", model.weather[0].State);               
+                command.Parameters.AddWithValue("@temp", model.main.temp);
+                command.Parameters.AddWithValue("@descri", model.weather[0].description);
+
+                command.ExecuteNonQuery();
             }
             catch (MySqlException ex)
             {
-                return ex.Message.ToString();
+                ex.Message.ToString();
             }
             conn.Close();
-            
-            if(exists == true)
-            {
-                return message = String.Format("Welcome {0}", userInfo.UserName);                
-            }
-            else
-            {                
-                return message = "Please enter a valid user name";
-            }           
-
         }
+        
     }
 }
