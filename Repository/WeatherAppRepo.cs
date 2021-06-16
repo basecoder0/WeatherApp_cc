@@ -29,7 +29,6 @@ namespace WeatherApp_cc.Repository
 
                 command.CommandText = "InsertUserInfo";
                 command.CommandType = System.Data.CommandType.StoredProcedure;
-
                 command.Parameters.AddWithValue("@u_Name", userInfo.UserName);
                 command.Parameters.AddWithValue("@f_Name", userInfo.FirstName);
                 command.Parameters.AddWithValue("@l_Name", userInfo.LastName);
@@ -64,12 +63,9 @@ namespace WeatherApp_cc.Repository
             {
                 conn.Open();
                 command.Connection = conn;
-
                 command.CommandText = "GetUserCredentials";
                 command.CommandType = System.Data.CommandType.StoredProcedure;
-
-                command.Parameters.AddWithValue("@u_Name", userInfo.UserName);
-               
+                command.Parameters.AddWithValue("@u_Name", userInfo.UserName);               
                 var result = command.ExecuteScalar();
                 if(Convert.ToInt16(result) > 0)
                 {

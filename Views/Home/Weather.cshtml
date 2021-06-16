@@ -3,66 +3,98 @@
     ViewData["Title"] = "Weather";
 }
 
-@if (ViewData["Login"] == "Success")
+@if (ViewData["Login"] != null)
 {
     <div class="form-row">
         <div class="text-success">@ViewData["Message"].ToString()</div><br><br>
     </div>
 }
 
-@using (Html.BeginForm("GetWeather", "Home", FormMethod.Get))
-{
-    <form>
-        <div class="top-buffer">
-            <button class="btn btn-primary" type="submit">Add</button>
-            <button class="btn btn-secondary" type="submit">Delete</button>
-            <button class="btn btn-secondary" type="submit" formmethod="get">Test Api </button>
-        </div>
-        <div class="top-buffer">
-            <div class="text-center">
-                <p id="instruction">To look up the weather in a specific City or State please entire in the information below</p>
-            </div>
-            <div class="form-row">
-                <div class="col-md-6 mb-3">
-                    @Html.LabelFor(m => m.weather[0].City)
-                    @Html.TextBoxFor(m => m.weather[0].City, new { @class = "form-control", @placeholder = "City" })
-                    @Html.ValidationMessageFor(m => m.weather[0].City)
-                </div>
-                <div class="col-md-6 mb-3">
-                    @Html.LabelFor(m => m.weather[0].State)
-                    @Html.TextBoxFor(m => m.weather[0].State, new { @class = "form-control", @placeholder = "State" })
-                </div>
-            </div>
-        </div>
-    </form>
-}
-@{
-    var data = (Rootobject)ViewData["WeatherAtt"];
-}
 
-<div class="top-buffer">
-    <table class="table align-middle">
-        <thead>
-            <tr>
-                <th scope="col">City</th>
-                <th scope="col">State</th>
-                <th scope="col">Temp</th>
-                <th scope="col">Weather Description</th>
-            </tr>
-        </thead>
-        <tbody>
-            @{
-                if (data != null)
-                {
-                    <tr>
-                        <td>@data.name</td>
-                        <td>@data.weather[0].State</td>
-                        <td>@data.main.temp.ToString("00.000")</td>
-                        <td>@data.weather[0].description</td>
-                    </tr>
+
+<div class="container">
+    <div class="text-center">
+        <h1> Insert Some Header Text ¯\_(ツ)_/¯</h1>
+    </div>
+    <div class="top-buffer">
+        @using (Html.BeginForm("GetWeather","Home", FormMethod.Get, new { id = "weatherForm" }))
+        {
+            <form>
+                <div class="form-row">
+                    <div class="col-md-5 mb-3">
+                        @Html.LabelFor(m => m.weather[0].City)
+                        @Html.TextBoxFor(m => m.weather[0].City, new { @class = "form-control", id = "City", placeholder = "City" })
+                        @Html.ValidationMessageFor(m => m.weather[0].City)
+                    </div>
+                    <div class="col-md-5 mb-3">
+                        @Html.LabelFor(m => m.weather[0].State)
+                        @Html.TextBoxFor(m => m.weather[0].State, new { @class = "form-control", id = "State", placeholder = "State" })
+                    </div>
+                    <div class="col-md-2 mb-3 btn-group-vertical">
+                        <button class="btn btn-md btn-success" id="addBtn" type="button">+ Add New Location</button>
+                    </div>
+                </div>
+            </form>
+        }
+    </div>
+    @{
+        var data = (Rootobject)ViewData["WeatherAtt"];
+    }
+    <div class="top-buffer">
+        <table class="table align-middle table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col">City</th>
+                    <th scope="col">State</th>
+                    <th scope="col">Temp</th>
+                    <th scope="col">Weather Description</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="weatherBody">
+                @{
+                    if (data != null)
+                    {
+                        <tr>
+                            <td>@data.name</td>
+                            <td>@data.weather[0].State</td>
+                            <td>@data.main.temp.ToString("00\u00B0F")</td>
+                            <td>@data.weather[0].description</td>
+                            <td>
+                                <span class="table-remove">
+                                    <button id="dltBtn" class="btn btn-danger btn-rounded btn-sm my-0y" type="submit">Delete</button>
+                                </span>
+                            </td>
+                        </tr>
+                    }
                 }
-            }
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    </div>
 </div>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript">      
+    $(document).ready(function () {      
+        $("#addBtn").click(function () {
+            var model = $("#weatherForm").serialize()
+            $.ajax({
+                url: '/Home/GetWeather',
+                type: 'GET',
+                cache: false,
+                data: model ,
+                success: function (model) {
+                    if (model != null) {
+                        var row = "";
+                        var name = model.name;
+                        var state = model.weather[0].state;
+                        var temp = model.main.temp;
+                        var description = model.weather[0].description;
+                    }
+                    row += "<tr><td>" + name + "</td><td>" + state + "</td><td>" + temp + "</td><td>" + description + "</td><td> <span class='table-remove'> <button id='dltBtn' class='btn btn-danger btn-rounded btn-sm my-0y' type='submit'>Delete</button></span></td></tr>"
+                    $('#weatherBody').append(row)
+                }                    
+            })
+        })
+    });
+</script>
