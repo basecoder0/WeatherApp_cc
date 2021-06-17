@@ -17,7 +17,7 @@ namespace WeatherApp_cc.Controllers
         private const string _apiKey = "&appid=72c5e00d2fd4a038784dcac1583135aa";
         private readonly ILogger<HomeController> _logger;
         private string message = "";
-        WeatherServices service = null;
+        WeatherServices service = new WeatherServices();
 
         public HomeController(ILogger<HomeController> logger)
         {
@@ -75,8 +75,7 @@ namespace WeatherApp_cc.Controllers
         public ActionResult GetUserCredentials(IndexModel userInfo)
         {
             if (userInfo.UserName != null)
-            {
-                service = new WeatherServices();
+            {      
                 message = service.GetUserCredentials(userInfo);
                 string userId = service.GetUserId(userInfo.UserName);
                 var weatherInfo = service.GetWeatherInfo(Convert.ToInt16(userId));
@@ -101,7 +100,7 @@ namespace WeatherApp_cc.Controllers
         [HttpPost]
         public ActionResult PostUserInfo(SignUpModel userInfo)
         {
-            service = new WeatherServices();
+            
             message = service.InsertUserInfo(userInfo);
             if (message != "Success")
             {
@@ -113,6 +112,12 @@ namespace WeatherApp_cc.Controllers
                 ViewData["Message"] = message;
                 return View("~/Views/Home/Weather.cshtml");
             }
+        }
+
+        [HttpPost]
+        public void DeleteEntry(string o)
+        {
+            
         }
 
         private void InsertWeatherInfo(Rootobject model)
@@ -130,8 +135,7 @@ namespace WeatherApp_cc.Controllers
 
         public int GetUserId(string userName)
         {
-            int u_id = 0;            
-            service = new WeatherServices();           
+            int u_id = 0;                     
             return u_id = Convert.ToInt16(service.GetUserId(userName));
         }
 

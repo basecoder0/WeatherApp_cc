@@ -18,7 +18,7 @@ namespace WeatherApp_cc.Services
         private string baseUrl;
         private string query;
         private string key;
-        WeatherAppRepo repo = null;
+        WeatherAppRepo repo = new WeatherAppRepo();
         public WeatherServices() { }
         private string message = "";
         private DataTable dt = null;
@@ -44,7 +44,12 @@ namespace WeatherApp_cc.Services
             StringBuilder reqStr = new StringBuilder();
             reqStr.AppendFormat(requestStr +"{0}{1}{2}", qStr, query, key);
             return reqStr.ToString();
-        }        
+        }      
+        
+        public void DeleteWeatherInfo()
+        {
+            repo.DeleteWeatherInfo();
+        }
 
         public Rootobject GetWeatherApi(string requestString)
         {
@@ -64,38 +69,33 @@ namespace WeatherApp_cc.Services
 
         public string GetUserCredentials(IndexModel userInfo)
         {
-            repo = new WeatherAppRepo();
+            
             return  repo.GetUserCredentials(userInfo);
         }
 
         public string GetUserId(string userName)
-        {
-            repo = new WeatherAppRepo();
+        {           
             return repo.GetUserId(userName);
         }
 
         public List<WeatherInfoModel> GetWeatherInfo(int userId)
-        {
-            repo = new WeatherAppRepo();
+        {           
             return repo.GetWeatherInfo(userId);
         }
 
         public string InsertUserInfo(SignUpModel userInfo)
         {            
-            repo = new WeatherAppRepo();
             return repo.InsertUserInfo(userInfo);
         }
 
         public void InsertWeatherInfo(Rootobject model)
-        {
-            repo = new WeatherAppRepo();
+        {            
             repo.InsertWeatherInfo(model);
         }
 
         public string KelvinToFahrenheit(double temp)
         {
             double fahrenheit = ((temp - 273.15) * 9 / 5) + 32;
-
             return fahrenheit.ToString("00");
         }
 

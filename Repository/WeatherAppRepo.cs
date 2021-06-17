@@ -14,6 +14,32 @@ namespace WeatherApp_cc.Repository
     {
         public WeatherAppRepo() { }
         private const string myConnectionString = "server=aa1ge0iuetvkf6c.cpuwmmcmrvhq.us-east-2.rds.amazonaws.com; port=3306; database=ebdb; uid=Roah7791; pwd=gK8bqd!eSw7NheA; database=ebdb";
+       
+        public void DeleteWeatherInfo()
+        {
+            MySqlConnection conn = null;
+            MySqlCommand command = null;
+
+            conn = new MySqlConnection();
+            command = new MySqlCommand();
+
+            conn.ConnectionString = myConnectionString;
+            try
+            {
+                conn.Open();
+                command.Connection = conn;
+                command.CommandText = "GetUserCredentials";
+                command.CommandType = System.Data.CommandType.StoredProcedure;
+                //command.Parameters.AddWithValue("@u_Name", userInfo.UserName);
+                var result = command.ExecuteScalar();
+               
+            }
+            catch (MySqlException ex)
+            {
+                 ex.Message.ToString();
+            }
+            conn.Close();
+        }
 
         public string GetUserCredentials(IndexModel userInfo)
         {
