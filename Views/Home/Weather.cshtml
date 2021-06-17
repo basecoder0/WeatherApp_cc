@@ -63,7 +63,7 @@
                             <td>@items.Description</td>
                             <td>
                                 <span class="table-remove">
-                                    <button id="dltBtn" class="btn btn-danger btn-rounded btn-sm my-0y" type="button" data-id="(@items.id)">Delete</button>
+                                    <button id="dltBtn" class="btn btn-danger btn-rounded btn-sm my-0y" type="button" data-id="@items.id'_'@items.Longitude'_'@items.Latitude">Delete</button>
                                 </span>
                             </td>
                         </tr>
@@ -92,25 +92,31 @@
                         var state = model.weather[0].state;
                         var temp = model.main.temp;
                         var description = model.weather[0].description;
-                        var id = model.weatherInfo.id
+                        var id = model.user_id;
+                        var lon = model.coord.lon;
+                        var lat = model.coord.lat;
                     }
-                    row += "<tr><td>" + name + "</td><td>" + state + "</td><td>" + temp + "</td><td>" + description + "</td><td> <span class='table-remove'> <button id='dltBtn' class='btn btn-danger btn-rounded btn-sm my-0y' type='button' data-id="+ id+">Delete</button></span></td></tr>"
+                    row += "<tr><td>" + name + "</td><td>" + state + "</td><td>" + temp + "</td><td>" + description + "</td><td> <span class='table-remove'> <button id='dltBtn' class='btn btn-danger btn-rounded btn-sm my-0y' type='button' data-id=" + id + "'_'" + lon + "'_'" + lat + ">Delete</button></span></td></tr>"
                     $('#weatherBody').append(row)
                 }
             })
         })
-    });
 
+        $("#weatherBody").on('click', '#dltBtn', function () {
+            var id = $(this).closest('tr');
+            $.ajax({
+                url: '/Home/DeleteWeatherInfo',
+                type: "POST",
+                cache: false,
+                data: { id: $(this).data("id") },
+                success: function (msg) {
+                    $(id).remove();
+                }
+            })
 
-    $("#dltBtn").click(function () {
-        var row = $(this).closest('tr');
-        $.post('/Home/DeleteEntry', { id: $(this).data('id') }, function (response) {
-            if (response) {
-                row.remove();
-            }
-        }).fail(function(response) {
-            alert("Delete Failed");
         });
+
     });
+
 
 </script>

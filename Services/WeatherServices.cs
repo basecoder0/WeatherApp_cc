@@ -33,8 +33,8 @@ namespace WeatherApp_cc.Services
             else if (model.weather[0].State != "")
                 this.query = model.weather[0].State;
 
-            this.baseUrl = baseUrl;            
-            this.key = key;        
+            this.baseUrl = baseUrl;
+            this.key = key;
         }
 
         public string BuildApiRequest()
@@ -42,13 +42,13 @@ namespace WeatherApp_cc.Services
             string requestStr = "";
             string qStr = "weather?q=";
             StringBuilder reqStr = new StringBuilder();
-            reqStr.AppendFormat(requestStr +"{0}{1}{2}", qStr, query, key);
+            reqStr.AppendFormat(requestStr + "{0}{1}{2}", qStr, query, key);
             return reqStr.ToString();
-        }      
-        
-        public void DeleteWeatherInfo()
+        }
+
+        public void DeleteWeatherInfo(string[] key)
         {
-            repo.DeleteWeatherInfo();
+            repo.DeleteWeatherInfo(key);
         }
 
         public Rootobject GetWeatherApi(string requestString)
@@ -69,27 +69,27 @@ namespace WeatherApp_cc.Services
 
         public string GetUserCredentials(IndexModel userInfo)
         {
-            
-            return  repo.GetUserCredentials(userInfo);
+
+            return repo.GetUserCredentials(userInfo);
         }
 
         public string GetUserId(string userName)
-        {           
+        {
             return repo.GetUserId(userName);
         }
 
         public List<WeatherInfoModel> GetWeatherInfo(int userId)
-        {           
+        {
             return repo.GetWeatherInfo(userId);
         }
 
         public string InsertUserInfo(SignUpModel userInfo)
-        {            
+        {
             return repo.InsertUserInfo(userInfo);
         }
 
         public void InsertWeatherInfo(Rootobject model)
-        {            
+        {
             repo.InsertWeatherInfo(model);
         }
 
@@ -97,6 +97,13 @@ namespace WeatherApp_cc.Services
         {
             double fahrenheit = ((temp - 273.15) * 9 / 5) + 32;
             return fahrenheit.ToString("00");
+        }
+
+        public string[] GetKey(string id)
+        {
+            string[] words;
+            words = id.Split("'_'");
+            return words;
         }
 
     }

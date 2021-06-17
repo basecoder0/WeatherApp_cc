@@ -99,8 +99,7 @@ namespace WeatherApp_cc.Controllers
 
         [HttpPost]
         public ActionResult PostUserInfo(SignUpModel userInfo)
-        {
-            
+        {            
             message = service.InsertUserInfo(userInfo);
             if (message != "Success")
             {
@@ -115,9 +114,10 @@ namespace WeatherApp_cc.Controllers
         }
 
         [HttpPost]
-        public void DeleteEntry(string o)
+        public void DeleteWeatherInfo(string id)
         {
-            
+            string[] key = service.GetKey(id);
+            service.DeleteWeatherInfo(key);
         }
 
         private void InsertWeatherInfo(Rootobject model)

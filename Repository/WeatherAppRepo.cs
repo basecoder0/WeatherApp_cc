@@ -15,7 +15,7 @@ namespace WeatherApp_cc.Repository
         public WeatherAppRepo() { }
         private const string myConnectionString = "server=aa1ge0iuetvkf6c.cpuwmmcmrvhq.us-east-2.rds.amazonaws.com; port=3306; database=ebdb; uid=Roah7791; pwd=gK8bqd!eSw7NheA; database=ebdb";
        
-        public void DeleteWeatherInfo()
+        public void DeleteWeatherInfo(string[] key)
         {
             MySqlConnection conn = null;
             MySqlCommand command = null;
@@ -28,11 +28,12 @@ namespace WeatherApp_cc.Repository
             {
                 conn.Open();
                 command.Connection = conn;
-                command.CommandText = "GetUserCredentials";
+                command.CommandText = "DeleteWeatherInfo";
                 command.CommandType = System.Data.CommandType.StoredProcedure;
-                //command.Parameters.AddWithValue("@u_Name", userInfo.UserName);
-                var result = command.ExecuteScalar();
-               
+                command.Parameters.AddWithValue("@u_id", Convert.ToInt16(key[0]));
+                command.Parameters.AddWithValue("@lon", float.Parse(key[1]));
+                command.Parameters.AddWithValue("@lat", float.Parse(key[2]));
+                var result = command.ExecuteScalar();               
             }
             catch (MySqlException ex)
             {
@@ -201,15 +202,15 @@ namespace WeatherApp_cc.Repository
             {
                 conn.Open();
                 command.Connection = conn;
-
                 command.CommandText = "InsertWeatherInfo";
                 command.CommandType = System.Data.CommandType.StoredProcedure;
                 command.Parameters.AddWithValue("@u_ID", model.user_id);
+                command.Parameters.AddWithValue("@lon", model.coord.lon);
+                command.Parameters.AddWithValue("@lat", model.coord.lat);
                 command.Parameters.AddWithValue("@city", model.weather[0].City);
                 command.Parameters.AddWithValue("@state", model.weather[0].State);               
                 command.Parameters.AddWithValue("@temp", model.main.temp);
                 command.Parameters.AddWithValue("@descri", model.weather[0].description);
-
                 command.ExecuteNonQuery();
             }
             catch (MySqlException ex)
