@@ -8,6 +8,9 @@ namespace WeatherApp_cc
 {
     public static class CommonMethod
     {
+        /**Helper Method to convert datatable results from SQLquery to 
+         * List<Model> to be using in Weather view table
+         **/
         public static List<T> ConvertToList<T>(DataTable dt)
         {
             var columnNames = dt.Columns.Cast<DataColumn>().Select(c => c.ColumnName.ToLower()).ToList();

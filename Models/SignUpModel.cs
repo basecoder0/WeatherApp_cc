@@ -7,20 +7,18 @@ using System.Threading.Tasks;
 namespace WeatherApp_cc.Models
 {
     public class SignUpModel
-    {
-        [Required(ErrorMessage ="Please Enter your First Name")]
+    {        
         [Display(Name = "First Name")]
         public string FirstName { get; set; }
-
-        [Required(ErrorMessage ="Please Enter your Last Name")]
+                
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
-        [Required(ErrorMessage ="Please Enter a User Name")]
+        [Required(ErrorMessage = "User Name already exist")]
         [Display(Name = "UserName")]
         public string UserName { get; set; }
 
-        [Required(ErrorMessage = "Please Enter a city")]
+        [Required(ErrorMessage = "City Required")]
         [Display(Name = "City")]
         public string City { get; set; }
 

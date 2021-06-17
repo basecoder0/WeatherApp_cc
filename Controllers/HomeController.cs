@@ -11,6 +11,9 @@ using WeatherApp_cc.Models;
 
 namespace WeatherApp_cc.Controllers
 {
+    /** Controller Class that handles all HTTP: POST, GET logic as well
+     * as INSERT, UPDATE, DELETE logic that will be passed into the service layer
+    **/
     public class HomeController : Controller
     {
         private const string _url = "https://api.openweathermap.org/data/2.5/";
@@ -74,43 +77,34 @@ namespace WeatherApp_cc.Controllers
         [HttpGet]
         public ActionResult GetUserCredentials(IndexModel userInfo)
         {
-            if (userInfo.UserName != null)
-            {      
+            if (userInfo.UserName != null && ModelState.IsValid)
+            {
                 message = service.GetUserCredentials(userInfo);
                 string userId = service.GetUserId(userInfo.UserName);
                 var weatherInfo = service.GetWeatherInfo(Convert.ToInt16(userId));
                 Rootobject model = new Rootobject();
                 model.weatherInfo = weatherInfo;
 
-                if (!message.Contains(userInfo.UserName))
-                {
-                    ViewData["Message"] = message;
-                    return View("Index");
-                }
-                else
-                {
-                    ViewData["Login"] = "Success";
-                    ViewData["UserName"] = message;
-                    return View("~/Views/Home/Weather.cshtml", model);
-                }
+                ViewData["Login"] = "Success";
+                ViewData["UserName"] = message;
+                return View("~/Views/Home/Weather.cshtml", model);
             }
-            return Redirect("Index");           
+            return View("Index", userInfo);
         }
 
         [HttpPost]
         public ActionResult PostUserInfo(SignUpModel userInfo)
-        {            
+        {
+            //var userExist = service.GetUserId(userInfo.UserName);
+            //if(Convert.ToInt16(userExist) > 0)
+
             message = service.InsertUserInfo(userInfo);
-            if (message != "Success")
+            if (message == "Success" && ModelState.IsValid)
             {
                 ViewData["Message"] = message;
-                return View("~/Views/Home/SignUp.cshtml");
+                return View("~/Views/Home/Weather.cshtml", userInfo);
             }
-            else
-            {
-                ViewData["Message"] = message;
-                return View("~/Views/Home/Weather.cshtml");
-            }
+            return View("SignUp", userInfo);
         }
 
         [HttpPost]
@@ -124,7 +118,7 @@ namespace WeatherApp_cc.Controllers
         {
             service.InsertWeatherInfo(model);
         }
-        
+
         private Rootobject GetAPIInfo(Rootobject weatherAtt)
         {
             service = new WeatherServices(_url, weatherAtt, _apiKey);
@@ -135,7 +129,7 @@ namespace WeatherApp_cc.Controllers
 
         public int GetUserId(string userName)
         {
-            int u_id = 0;                     
+            int u_id = 0;
             return u_id = Convert.ToInt16(service.GetUserId(userName));
         }
 

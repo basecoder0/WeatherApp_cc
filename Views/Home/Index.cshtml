@@ -15,12 +15,9 @@
                 <div class="offset-md-5">
                     @Html.LabelFor(m => m.UserName)
                     @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", @placeholder = "UserName" })
+                    @Html.ValidationMessageFor(m => m.UserName, null, new { @class = "text-danger" })
                 </div>
-            </div>
-            @if (ViewData["Message"] != null)
-            {
-                Html.ValidationMessageFor(m => m.UserName, ViewData["Message"].ToString(), new { @class = "text-danger" });
-            }
+            </div>         
             <div class="top-buffer">
                 <button class="btn btn-primary" type="submit">Log In</button>
             </div>

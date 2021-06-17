@@ -10,11 +10,15 @@ using WeatherApp_cc.Models;
 
 namespace WeatherApp_cc.Repository
 {
+    /** Repository Class that contains all repository logic each
+     * method corresponds to a stored procedure in the database      
+     **/
     public class WeatherAppRepo
     {
         public WeatherAppRepo() { }
         private const string myConnectionString = "server=aa1ge0iuetvkf6c.cpuwmmcmrvhq.us-east-2.rds.amazonaws.com; port=3306; database=ebdb; uid=Roah7791; pwd=gK8bqd!eSw7NheA; database=ebdb";
        
+
         public void DeleteWeatherInfo(string[] key)
         {
             MySqlConnection conn = null;

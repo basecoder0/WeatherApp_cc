@@ -13,6 +13,9 @@ using System.Data;
 
 namespace WeatherApp_cc.Services
 {
+    /**Service Class that contains all pipelined / transformation logic  
+     * between the Controller and the repository
+    **/
     public class WeatherServices
     {
         private string baseUrl;

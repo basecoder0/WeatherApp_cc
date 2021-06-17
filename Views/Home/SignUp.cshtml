@@ -17,17 +17,17 @@
             <div class="col-md-4 mb-3">
                 @Html.LabelFor(m => m.FirstName)
                 <div class="input-group">
-                    @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", @placeholder = "First Name" })
-                    @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger" })
+                    @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", @placeholder = "First Name" , required = "required" })
                 </div>
+                @Html.ValidationMessageFor(m => m.FirstName, null, new { @class = "text-danger" })
             </div>
 
             <div class="col-md-4 mb-3">
                 @Html.LabelFor(m => m.LastName)
                 <div class="input-group">
-                    @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", @placeholder = "Last Name" })
-                    @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger" })
+                    @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", @placeholder = "Last Name" , required = "required" })
                 </div>
+                @Html.ValidationMessageFor(m => m.LastName, null, new { @class = "text-danger" })
             </div>
 
             <div class="col-md-4 mb-3">
@@ -36,9 +36,9 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="inputGroupPrepend2"></span>
                     </div>
-                    @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", @placeholder = "UserName" })
-                    @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
+                    @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", @placeholder = "UserName", required = "required" })
                 </div>
+                @Html.ValidationMessageFor(m => m.UserName, null, new { @class = "text-danger" })
             </div>
         </div>
 
@@ -46,9 +46,9 @@
             <div class="col-md-6 mb-3">
                 @Html.LabelFor(m => m.City)
                 <div class="input-group">
-                    @Html.TextBoxFor(m => m.City, new { @class = "form-control", @placeholder = "City" })
-                    @Html.ValidationMessageFor(m => m.City, "", new { @class = "text-danger" })
+                    @Html.TextBoxFor(m => m.City, new { @class = "form-control", @placeholder = "City" , required = "required" })
                 </div>
+                @Html.ValidationMessageFor(m => m.City, null, new { @class = "text-danger" })
             </div>
 
             <div class="col-md-3 mb-3">
