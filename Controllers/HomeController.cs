@@ -73,25 +73,29 @@ namespace WeatherApp_cc.Controllers
 
         [HttpGet]
         public ActionResult GetUserCredentials(IndexModel userInfo)
-        {               
-            service = new WeatherServices();
-            message = service.GetUserCredentials(userInfo);
-            string userId = service.GetUserId(userInfo.UserName);
-            var weatherInfo= service.GetWeatherInfo(Convert.ToInt16(userId));
-            Rootobject model = new Rootobject();
-            model.weatherInfo = weatherInfo;
+        {
+            if (userInfo.UserName != null)
+            {
+                service = new WeatherServices();
+                message = service.GetUserCredentials(userInfo);
+                string userId = service.GetUserId(userInfo.UserName);
+                var weatherInfo = service.GetWeatherInfo(Convert.ToInt16(userId));
+                Rootobject model = new Rootobject();
+                model.weatherInfo = weatherInfo;
 
-            if (!message.Contains(userInfo.UserName))
-            {
-                ViewData["Message"] = message;
-                return View("Index");
+                if (!message.Contains(userInfo.UserName))
+                {
+                    ViewData["Message"] = message;
+                    return View("Index");
+                }
+                else
+                {
+                    ViewData["Login"] = "Success";
+                    ViewData["UserName"] = message;
+                    return View("~/Views/Home/Weather.cshtml", model);
+                }
             }
-            else
-            {
-                ViewData["Login"] = "Success";
-                ViewData["UserName"] = message;
-                return View("~/Views/Home/Weather.cshtml", model);
-            }
+            return Redirect("Index");           
         }
 
         [HttpPost]

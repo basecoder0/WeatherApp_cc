@@ -52,7 +52,9 @@
                 </tr>
             </thead>
             <tbody id="weatherBody">
-                @foreach(var items in Model.weatherInfo)
+                @if (Model.weatherInfo != null)
+                {
+                    foreach (var items in Model.weatherInfo)
                     {
                         <tr>
                             <td>@items.City</td>
@@ -66,7 +68,8 @@
                             </td>
                         </tr>
                     }
-                
+                }
+
             </tbody>
         </table>
     </div>
