@@ -69,16 +69,21 @@ namespace WeatherApp_cc.Controllers
             apiString.main.temp = Convert.ToDouble(temp);
             apiString.user_id = GetUserId(model.userName);
 
-            InsertWeatherInfo(apiString);
-            //Work on elegant error handling
+            InsertWeatherInfo(apiString);           
             return Json(apiString);
         }
 
-        [HttpGet]
+        [HttpGet]       
         public ActionResult GetUserCredentials(IndexModel userInfo)
         {
-            if (userInfo.UserName != null && ModelState.IsValid)
+            if (ModelState.IsValid)
             {
+                var userExist = service.UserExist(userInfo.UserName);
+                if (!userExist)
+                {
+                    ModelState.AddModelError("UserName", "Please Enter a Valid User Name");
+                    return View("Index", userInfo);
+                }
                 message = service.GetUserCredentials(userInfo);
                 string userId = service.GetUserId(userInfo.UserName);
                 var weatherInfo = service.GetWeatherInfo(Convert.ToInt16(userId));
@@ -87,23 +92,29 @@ namespace WeatherApp_cc.Controllers
 
                 ViewData["Login"] = "Success";
                 ViewData["UserName"] = message;
-                return View("~/Views/Home/Weather.cshtml", model);
+                return View("Weather", model);
             }
-            return View("Index", userInfo);
+            return Redirect("Index");
         }
 
         [HttpPost]
         public ActionResult PostUserInfo(SignUpModel userInfo)
         {
-            //var userExist = service.GetUserId(userInfo.UserName);
-            //if(Convert.ToInt16(userExist) > 0)
-
-            message = service.InsertUserInfo(userInfo);
-            if (message == "Success" && ModelState.IsValid)
+            var userExist = service.UserExist(userInfo.UserName);
+            if (userExist)
             {
-                ViewData["Message"] = message;
-                return View("~/Views/Home/Weather.cshtml", userInfo);
+                ModelState.AddModelError("UserName", "User Name already exists");
+                return View("SignUp", userInfo);
             }
+            else
+            {
+                message = service.InsertUserInfo(userInfo);
+                if (message == "Success" && ModelState.IsValid)
+                {
+                    ViewData["Message"] = message;
+                    return View("Weather", userInfo);
+                }
+            }            
             return View("SignUp", userInfo);
         }
 

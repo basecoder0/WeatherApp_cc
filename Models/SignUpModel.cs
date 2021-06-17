@@ -14,7 +14,7 @@ namespace WeatherApp_cc.Models
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
-        [Required(ErrorMessage = "User Name already exist")]
+        [Required]
         [Display(Name = "UserName")]
         public string UserName { get; set; }
 

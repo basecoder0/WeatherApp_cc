@@ -111,8 +111,7 @@ namespace WeatherApp_cc.Repository
                 if(dt.Rows.Count > 0)
                 {
                     userId = dt.Rows[0]["UserId"].ToString();
-                }               
-                
+                }              
             }
             catch (MySqlException ex)
             {
@@ -120,6 +119,39 @@ namespace WeatherApp_cc.Repository
             }
             conn.Close();
             return userId;
+        }
+
+        public bool UserExist(string userName)
+        {
+            bool userExist = false;
+
+            DataTable dt = new DataTable();            
+            MySqlConnection conn = null;
+            MySqlCommand command = null;
+
+            conn = new MySqlConnection();
+            command = new MySqlCommand();
+
+            conn.ConnectionString = myConnectionString;
+            try
+            {
+                conn.Open();
+                command.Connection = conn;
+                command.CommandText = "GetUserId";
+                command.CommandType = System.Data.CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@u_Name", userName);
+
+                dt.Load(command.ExecuteReader());
+                if (dt.Rows.Count > 0)
+                {
+                    return userExist = true;
+                }
+            }
+            catch (MySqlException ex)
+            {                
+            }
+            conn.Close();
+            return userExist;
         }
 
         public List<WeatherInfoModel> GetWeatherInfo(int userId)

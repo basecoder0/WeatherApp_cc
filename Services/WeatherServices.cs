@@ -76,10 +76,16 @@ namespace WeatherApp_cc.Services
             return repo.GetUserCredentials(userInfo);
         }
 
+        public bool UserExist(string userName)
+        {
+            return repo.UserExist(userName);
+        }
+
         public string GetUserId(string userName)
         {
             return repo.GetUserId(userName);
         }
+
 
         public List<WeatherInfoModel> GetWeatherInfo(int userId)
         {
