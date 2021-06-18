@@ -3,8 +3,6 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using WeatherApp_cc.Services;
 using WeatherApp_cc.Models;
 
@@ -16,8 +14,8 @@ namespace WeatherApp_cc.Controllers
     **/
     public class HomeController : Controller
     {
-        private const string _url = "https://api.openweathermap.org/data/2.5/";
-        private const string _apiKey = "&appid=72c5e00d2fd4a038784dcac1583135aa";
+        private const string _url = "";
+        private const string _apiKey = "";
         private readonly ILogger<HomeController> _logger;
         private string message = "";
         WeatherServices service = new WeatherServices();
@@ -89,9 +87,10 @@ namespace WeatherApp_cc.Controllers
                 var weatherInfo = service.GetWeatherInfo(Convert.ToInt16(userId));
                 Rootobject model = new Rootobject();
                 model.weatherInfo = weatherInfo;
-                //uncomment this when ready to test update funcationality or it is ready to turn in
-                //model.weatherInfo = UpdateWeatherInfo(weatherInfo);
-
+                if (weatherInfo != null)
+                {
+                    model.weatherInfo = UpdateWeatherInfo(weatherInfo);
+                }
                 ViewData["Login"] = "Success";
                 ViewData["UserName"] = message;
                 return View("Weather", model);
@@ -106,7 +105,7 @@ namespace WeatherApp_cc.Controllers
             string temp = "";
 
             string userId = service.GetUserId(userInfo.UserName);
-            var weatherInfo= service.GetUserSignUpLoc(Convert.ToInt16(userId));
+            var weatherInfo = service.GetUserSignUpLoc(Convert.ToInt16(userId));
             model.weatherInfo = weatherInfo;
             var apiString = GetAPIInfo(model);
             temp = service.KelvinToFahrenheit(apiString.main.temp);
@@ -114,7 +113,7 @@ namespace WeatherApp_cc.Controllers
             apiString.user_id = Convert.ToInt16(userId);
 
             InsertWeatherInfo(apiString);
-            return Json(apiString);            
+            return Json(apiString);
         }
 
         [HttpPost]
@@ -129,7 +128,7 @@ namespace WeatherApp_cc.Controllers
             else
             {
                 message = service.InsertUserInfo(userInfo);
-                //if ( ModelState.IsValid)
+
                 if (message == "Success" && ModelState.IsValid)
                 {
                     ViewData["Login"] = "Success";
@@ -166,16 +165,16 @@ namespace WeatherApp_cc.Controllers
             }
             else
             {
-               
-                foreach(var item in weatherAtt.weatherInfo)
+
+                foreach (var item in weatherAtt.weatherInfo)
                 {
                     weather.City = item.City;
                     weather.State = item.State;
-                }               
-                service = new WeatherServices(_url, weather,_apiKey);
-            }           
+                }
+                service = new WeatherServices(_url, weather, _apiKey);
+            }
             var requestStr = service.BuildApiRequest();
-            var json = service.GetWeatherApi(requestStr,weather.City, weather.State);
+            var json = service.GetWeatherApi(requestStr, weather.City, weather.State);
             return json;
         }
 

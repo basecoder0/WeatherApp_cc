@@ -16,7 +16,7 @@ namespace WeatherApp_cc.Repository
     public class WeatherAppRepo
     {
         public WeatherAppRepo() { }
-        private const string myConnectionString = "server=aa1ge0iuetvkf6c.cpuwmmcmrvhq.us-east-2.rds.amazonaws.com; port=3306; database=ebdb; uid=Roah7791; pwd=gK8bqd!eSw7NheA; database=ebdb";
+        private const string myConnectionString = "";
        
 
         public void DeleteWeatherInfo(string[] key)
@@ -313,7 +313,7 @@ namespace WeatherApp_cc.Repository
                 command.Parameters.AddWithValue("@lon", model.Longitude);
                 command.Parameters.AddWithValue("@lat",model.Latitude);
                 command.Parameters.AddWithValue("@temp",model.Temperature );
-                command.Parameters.AddWithValue("@descri", model.Description);
+                command.Parameters.AddWithValue("@descri", model.WeatherDescription);
                 command.ExecuteNonQuery();
             }
             catch (MySqlException ex)
@@ -321,8 +321,6 @@ namespace WeatherApp_cc.Repository
                 ex.Message.ToString();
             }
             conn.Close();
-
-        }
-        
+        }        
     }
 }

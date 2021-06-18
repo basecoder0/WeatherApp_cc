@@ -1,4 +1,3 @@
-using System;
 
 namespace WeatherApp_cc.Models
 {

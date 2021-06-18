@@ -1,4 +1,5 @@
 ﻿$(document).ready(function () {
+    ////Shows and Hides popup window in weather view
     var stopAutoHide;
     function showWindow() {
         $('#main').show();

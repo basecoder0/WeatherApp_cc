@@ -64,16 +64,14 @@
                         <th scope="col">Actions</th>
                     </tr>
                 </thead>
-
                 <tbody id="weatherBody">
-
                     @foreach (var items in Model.weatherInfo)
                     {
                         <tr>
                             <td>@items.City</td>
                             <td>@items.State</td>
                             <td>@items.Temperature.ToString("00\u00B0F")</td>
-                            <td>@items.Description</td>
+                            <td>@items.WeatherDescription</td>
                             <td>
                                 <span class="table-remove">
                                     <button id="dltBtn" class="btn btn-danger btn-rounded btn-sm my-0y" type="button" data-id="@items.id'_'@items.Longitude'_'@items.Latitude">Delete</button>
@@ -81,9 +79,7 @@
                             </td>
                         </tr>
                     }
-
                 </tbody>
-
             </table>
         }
         else

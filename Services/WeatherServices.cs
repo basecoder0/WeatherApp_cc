@@ -1,27 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
-using System.Threading.Tasks;
-using System.Text.Json;
 using WeatherApp_cc.Models;
 using WeatherApp_cc.Repository;
 using RestSharp;
 using Newtonsoft.Json;
-using System.Data;
 
 namespace WeatherApp_cc.Services
 {
     /**Service Class that contains all pipelined / transformation logic  
-     * between the Controller and the repository
+     * between the controller and the repository layers
     **/
     public class WeatherServices
     {
         private string baseUrl;
         private string query;
         private string key;
-        WeatherAppRepo repo = new WeatherAppRepo();   
+        private WeatherAppRepo repo = new WeatherAppRepo();   
 
         public WeatherServices() { }
 
@@ -89,7 +84,6 @@ namespace WeatherApp_cc.Services
 
         public string GetUserCredentials(IndexModel userInfo)
         {
-
             return repo.GetUserCredentials(userInfo);
         }
 
@@ -148,14 +142,13 @@ namespace WeatherApp_cc.Services
                 City = json.weather[0].City,
                 State = json.weather[0].State,
                 Latitude = json.coord.lat,
-                Longitude = json.coord.lon,                
-                Description = json.weather[0].description,
+                Longitude = json.coord.lon,
+                WeatherDescription = json.weather[0].description,
 
             };
             var temp = KelvinToFahrenheit(json.main.temp);
             info.Temperature = Convert.ToDouble(temp);
             return info;
         }
-
     }
 }
