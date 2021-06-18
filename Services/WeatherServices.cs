@@ -21,12 +21,10 @@ namespace WeatherApp_cc.Services
         private string baseUrl;
         private string query;
         private string key;
-        WeatherAppRepo repo = new WeatherAppRepo();
-  
-        private string message = "";
-        private DataTable dt = null;
+        WeatherAppRepo repo = new WeatherAppRepo();   
 
         public WeatherServices() { }
+
         public WeatherServices(string baseUrl, WeatherInfoModel model, string key)
         {
             if (model.City != "" && model.State != "")
@@ -42,7 +40,6 @@ namespace WeatherApp_cc.Services
 
         public WeatherServices(string baseUrl, Rootobject model, string key)
         {
-
             if (model.weather[0].City != "" && model.weather[0].State != "")
                 this.query = model.weather[0].City + "," + model.weather[0].State;
             else if (model.weather[0].City != "")
@@ -68,19 +65,25 @@ namespace WeatherApp_cc.Services
             repo.DeleteWeatherInfo(key);
         }
 
-        public Rootobject GetWeatherApi(string requestString)
+        public Rootobject GetWeatherApi(string requestString, string city="", string state="")
         {
             var client = new RestClient(baseUrl);
             var request = new RestRequest(requestString);
             var response = client.Execute(request);
-
             Rootobject result = null;
+            var weatherRes = new Weather()
+            {
+                City = city,
+                State = state
+            };
 
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 string rawResponse = response.Content;
                 result = JsonConvert.DeserializeObject<Rootobject>(rawResponse);
             }
+            result.weather[0].City = weatherRes.City;
+            result.weather[0].State = weatherRes.State;
             return result;
         }
 
@@ -101,7 +104,11 @@ namespace WeatherApp_cc.Services
         {
             return repo.GetUserId(userName);
         }
-
+     
+        public List<WeatherInfoModel> GetUserSignUpLoc(int userId)
+        {
+            return repo.GetUserSignUpLoc(userId);
+        }
         public List<WeatherInfoModel> GetWeatherInfo(int userId)
         {
             return repo.GetWeatherInfo(userId);

@@ -89,6 +89,7 @@ namespace WeatherApp_cc.Controllers
                 var weatherInfo = service.GetWeatherInfo(Convert.ToInt16(userId));
                 Rootobject model = new Rootobject();
                 model.weatherInfo = weatherInfo;
+                //uncomment this when ready to test update funcationality or it is ready to turn in
                 //model.weatherInfo = UpdateWeatherInfo(weatherInfo);
 
                 ViewData["Login"] = "Success";
@@ -96,6 +97,24 @@ namespace WeatherApp_cc.Controllers
                 return View("Weather", model);
             }
             return Redirect("Index");
+        }
+
+        [HttpGet]
+        public JsonResult GetUserSignUpLoc(IndexModel userInfo)
+        {
+            Rootobject model = new Rootobject();
+            string temp = "";
+
+            string userId = service.GetUserId(userInfo.UserName);
+            var weatherInfo= service.GetUserSignUpLoc(Convert.ToInt16(userId));
+            model.weatherInfo = weatherInfo;
+            var apiString = GetAPIInfo(model);
+            temp = service.KelvinToFahrenheit(apiString.main.temp);
+            apiString.main.temp = Convert.ToDouble(temp);
+            apiString.user_id = Convert.ToInt16(userId);
+
+            InsertWeatherInfo(apiString);
+            return Json(apiString);            
         }
 
         [HttpPost]
@@ -110,10 +129,17 @@ namespace WeatherApp_cc.Controllers
             else
             {
                 message = service.InsertUserInfo(userInfo);
+                //if ( ModelState.IsValid)
                 if (message == "Success" && ModelState.IsValid)
                 {
+                    ViewData["Login"] = "Success";
                     ViewData["Message"] = message;
-                    return View("Weather", userInfo);
+                    ViewData["UserName"] = userInfo.UserName;
+
+                    Rootobject userObj = new Rootobject();
+                    userObj.signUpModel = userInfo;
+
+                    return View("Weather", userObj);
                 }
             }
             return View("SignUp", userInfo);
@@ -133,9 +159,23 @@ namespace WeatherApp_cc.Controllers
 
         private Rootobject GetAPIInfo(Rootobject weatherAtt)
         {
-            service = new WeatherServices(_url, weatherAtt, _apiKey);
+            WeatherInfoModel weather = new WeatherInfoModel();
+            if (weatherAtt.weather != null)
+            {
+                service = new WeatherServices(_url, weatherAtt, _apiKey);
+            }
+            else
+            {
+               
+                foreach(var item in weatherAtt.weatherInfo)
+                {
+                    weather.City = item.City;
+                    weather.State = item.State;
+                }               
+                service = new WeatherServices(_url, weather,_apiKey);
+            }           
             var requestStr = service.BuildApiRequest();
-            var json = service.GetWeatherApi(requestStr);
+            var json = service.GetWeatherApi(requestStr,weather.City, weather.State);
             return json;
         }
 
@@ -148,22 +188,21 @@ namespace WeatherApp_cc.Controllers
                 var requestStr = service.BuildApiRequest();
                 var json = service.GetWeatherApi(requestStr);
                 json.weather[0].City = item.City;
-                json.weather[0].State = item.State;                
+                json.weather[0].State = item.State;
                 json.weatherInfo_Obj = service.createNewJSONObj(json);
-                json.weatherInfo_Obj.id= item.id;
-                service.UpdateWeatherInfo(json.weatherInfo_Obj);    
+                json.weatherInfo_Obj.id = item.id;
+                service.UpdateWeatherInfo(json.weatherInfo_Obj);
 
                 updatedWeather.Add(json.weatherInfo_Obj);
             }
             return updatedWeather;
         }
 
+        private int GetUserId(string userName)
+        {
+            int u_id = 0;
+            return u_id = Convert.ToInt16(service.GetUserId(userName));
+        }
 
-    private int GetUserId(string userName)
-    {
-        int u_id = 0;
-        return u_id = Convert.ToInt16(service.GetUserId(userName));
     }
-
-}
 }

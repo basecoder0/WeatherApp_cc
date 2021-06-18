@@ -26,18 +26,17 @@ namespace WeatherApp_cc.Repository
 
             conn = new MySqlConnection();
             command = new MySqlCommand();
-
             conn.ConnectionString = myConnectionString;
             try
-            {
+            {               
                 conn.Open();
                 command.Connection = conn;
                 command.CommandText = "DeleteWeatherInfo";
                 command.CommandType = System.Data.CommandType.StoredProcedure;
                 command.Parameters.AddWithValue("@u_id", Convert.ToInt16(key[0]));
-                command.Parameters.AddWithValue("@lon", float.Parse(key[1]));
-                command.Parameters.AddWithValue("@lat", float.Parse(key[2]));
-                var result = command.ExecuteScalar();               
+                command.Parameters.AddWithValue("@lon", decimal.Parse(key[1].ToString()));
+                command.Parameters.AddWithValue("@lat", decimal.Parse(key[2].ToString()));
+                command.ExecuteScalar();               
             }
             catch (MySqlException ex)
             {
@@ -191,6 +190,44 @@ namespace WeatherApp_cc.Repository
             conn.Close();
             return weatherInfo;
         }
+
+        public List<WeatherInfoModel> GetUserSignUpLoc(int userId)
+        {
+            List<WeatherInfoModel> weatherInfo = new List<WeatherInfoModel>();
+            DataTable dt = new DataTable();
+            MySqlConnection conn = null;
+            MySqlCommand command = null;
+            conn = new MySqlConnection();
+            command = new MySqlCommand();
+
+            conn.ConnectionString = myConnectionString;
+            try
+            {
+                conn.Open();
+                command.Connection = conn;
+                command.CommandText = "GetUserSignUpLoc";
+                command.CommandType = System.Data.CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@u_id", userId);
+                command.ExecuteNonQuery();
+
+                dt.Load(command.ExecuteReader());
+                if (dt.Rows.Count > 0)
+                {
+                    weatherInfo = CommonMethod.ConvertToList<WeatherInfoModel>(dt);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (MySqlException ex)
+            {
+                ex.Message.ToString();
+            }
+            conn.Close();
+            return weatherInfo;
+        }
+
 
         public string  InsertUserInfo(SignUpModel userInfo)
         {

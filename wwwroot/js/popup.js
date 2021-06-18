@@ -1,9 +1,25 @@
 ﻿$(document).ready(function () {
+    var stopAutoHide;
+    function showWindow() {
+        $('#main').show();
+        stopAutoHide = setTimeout(hideWindow, 5000);
+    }
 
-    $("#addBtn").click(function () {
+    function hideWindow() {
+        $('#main').hide();
+    }
+    setTimeout(showWindow, 2000);
+
+    $("#noBtn").click(function () {
+        hideWindow();
+        clearTimeout(stopAutoHide)
+    })
+
+    ////Get user's location from DB
+    $("#yesBtn").click(function getLocation() {
         var model = $("#weatherForm").serialize()
         $.ajax({
-            url: '/Home/GetWeather',
+            url: '/Home/GetUserSignUpLoc',
             type: 'GET',
             cache: false,
             data: model,
@@ -23,17 +39,4 @@
             }
         })
     })
-
-    $("#weatherBody").on('click', '#dltBtn', function () {
-        var id = $(this).closest('tr');
-        $.ajax({
-            url: '/Home/DeleteWeatherInfo',
-            type: "POST",
-            cache: false,
-            data: { id: $(this).data("id") },
-            success: function (msg) {
-                $(id).remove();
-            }
-        })
-    });     
 });

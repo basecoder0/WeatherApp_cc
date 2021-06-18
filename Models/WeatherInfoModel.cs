@@ -8,7 +8,7 @@ namespace WeatherApp_cc.Models
         public string State { get; set; }
         public double Temperature { get; set; }
         public string Description { get; set; }
-        public float Longitude{ get; set; }
-        public float Latitude { get; set; }
+        public decimal Longitude{ get; set; }
+        public decimal Latitude { get; set; }
     }
 }

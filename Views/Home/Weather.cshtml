@@ -10,9 +10,11 @@
         <div class="text-success"> Welcome @ViewData["UserName"].ToString()</div><br><br>
     </div>
 }
+
 <div id="main">
     <div id="pop-up">
         <h3> Would you like to get the weather for your current location?</h3>
+        <p id="suppt"></p>
         <div class="text-center">
             <button class="btn btn-primary" type="submit" id="yesBtn">Yes</button>
             <button class="btn btn-primary" type="submit" id="noBtn">No</button>
@@ -50,20 +52,22 @@
         var data = (Rootobject)ViewData["WeatherAtt"];
     }
     <div class="top-buffer">
-        <table class="table align-middle table-bordered">
-            <thead>
-                <tr>
-                    <th scope="col">City</th>
-                    <th scope="col">State</th>
-                    <th scope="col">Temp</th>
-                    <th scope="col">Weather Description</th>
-                    <th scope="col">Actions</th>
-                </tr>
-            </thead>
-            <tbody id="weatherBody">
-                @if (Model.weatherInfo != null)
-                {
-                    foreach (var items in Model.weatherInfo)
+        @if (Model.weatherInfo != null)
+        {
+            <table class="table align-middle table-bordered">
+                <thead>
+                    <tr>
+                        <th scope="col">City</th>
+                        <th scope="col">State</th>
+                        <th scope="col">Temp</th>
+                        <th scope="col">Weather Description</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody id="weatherBody">
+
+                    @foreach (var items in Model.weatherInfo)
                     {
                         <tr>
                             <td>@items.City</td>
@@ -77,15 +81,29 @@
                             </td>
                         </tr>
                     }
-                }
 
-            </tbody>
-        </table>
+                </tbody>
+
+            </table>
+        }
+        else
+        {
+            <table class="table align-middle table-bordered">
+                <thead>
+                    <tr>
+                        <th scope="col">City</th>
+                        <th scope="col">State</th>
+                        <th scope="col">Temp</th>
+                        <th scope="col">Weather Description</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="weatherBody">
+                </tbody>
+            </table>
+            <script src="~/js/popup.js"></script>
+        }
     </div>
 </div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="~/js/weather.js"></script>
-  
-
-

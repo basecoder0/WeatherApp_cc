@@ -11,6 +11,7 @@ namespace WeatherApp_cc.Models
     {
         public List<WeatherInfoModel> weatherInfo { get; set; }
         public WeatherInfoModel weatherInfo_Obj{ get; set; }
+        public SignUpModel signUpModel { get; set; }
         public int user_id { get; set; }
         public string userName { get; set; }
         public Coord coord { get; set; }
@@ -31,8 +32,8 @@ namespace WeatherApp_cc.Models
 
     public class Coord
     {
-        public float lon { get; set; }
-        public float lat { get; set; }
+        public decimal lon { get; set; }
+        public decimal lat { get; set; }
     }
 
     public class Main
