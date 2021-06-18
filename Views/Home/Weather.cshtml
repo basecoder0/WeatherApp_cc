@@ -25,8 +25,7 @@
 <div class="container">
 
     <div class="text-center">
-        <h1>Welcome to the weather app</h1>
-        <p>when initially signing up please consider the following formatting options</p>
+        <p>Welcome to the weather app to use this app correctly please observe the following instructions below</p>
         <p><b>City</b> : please enter full city name</p>
         <p><b>State</b> : please enter full state name</p>
     </div>
@@ -45,7 +44,8 @@
                         @Html.LabelFor(m => m.weather[0].State)
                         @Html.TextBoxFor(m => m.weather[0].State, new { @class = "form-control", id = "State", placeholder = "State" })
                     </div>
-                    <div class="col-md-2 mb-3 btn-group-vertical">
+                    
+                    <div class="col-md-2 mb-3 align-self-end">
                         <button class="btn btn-md btn-success" id="addBtn" type="button">+ Add New Location</button>
                     </div>
                 </div>

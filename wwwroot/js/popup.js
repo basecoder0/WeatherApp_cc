@@ -6,7 +6,7 @@
     function showWindow() {
         $('#main-popup').show();
         $('#inBox').hide();
-        stopAutoHide = setTimeout(hideWindow, 9000);
+        stopAutoHide = setTimeout(hideWindow, 5000);
     }
 
     function hideWindow() {
