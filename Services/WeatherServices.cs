@@ -22,9 +22,23 @@ namespace WeatherApp_cc.Services
         private string query;
         private string key;
         WeatherAppRepo repo = new WeatherAppRepo();
-        public WeatherServices() { }
+  
         private string message = "";
         private DataTable dt = null;
+
+        public WeatherServices() { }
+        public WeatherServices(string baseUrl, WeatherInfoModel model, string key)
+        {
+            if (model.City != "" && model.State != "")
+                this.query = model.City + "," + model.State;
+            else if (model.City != "")
+                this.query = model.City;
+            else if (model.State != "")
+                this.query = model.State;
+
+            this.baseUrl = baseUrl;
+            this.key = key;
+        }
 
         public WeatherServices(string baseUrl, Rootobject model, string key)
         {
@@ -76,16 +90,17 @@ namespace WeatherApp_cc.Services
             return repo.GetUserCredentials(userInfo);
         }
 
-        public bool UserExist(string userName)
+        public string[] GetKey(string id)
         {
-            return repo.UserExist(userName);
+            string[] words;
+            words = id.Split("'_'");
+            return words;
         }
 
         public string GetUserId(string userName)
         {
             return repo.GetUserId(userName);
         }
-
 
         public List<WeatherInfoModel> GetWeatherInfo(int userId)
         {
@@ -108,11 +123,31 @@ namespace WeatherApp_cc.Services
             return fahrenheit.ToString("00");
         }
 
-        public string[] GetKey(string id)
+        public void UpdateWeatherInfo(WeatherInfoModel model)
         {
-            string[] words;
-            words = id.Split("'_'");
-            return words;
+            repo.UpdateWeatherInfo(model);
+        }
+
+        public bool UserExist(string userName)
+        {
+            return repo.UserExist(userName);
+        }
+
+        public WeatherInfoModel createNewJSONObj(Rootobject json)
+        {
+            WeatherInfoModel info = new WeatherInfoModel()
+            {
+
+                City = json.weather[0].City,
+                State = json.weather[0].State,
+                Latitude = json.coord.lat,
+                Longitude = json.coord.lon,                
+                Description = json.weather[0].description,
+
+            };
+            var temp = KelvinToFahrenheit(json.main.temp);
+            info.Temperature = Convert.ToDouble(temp);
+            return info;
         }
 
     }

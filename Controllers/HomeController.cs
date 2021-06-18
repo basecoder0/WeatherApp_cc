@@ -69,11 +69,11 @@ namespace WeatherApp_cc.Controllers
             apiString.main.temp = Convert.ToDouble(temp);
             apiString.user_id = GetUserId(model.userName);
 
-            InsertWeatherInfo(apiString);           
+            InsertWeatherInfo(apiString);
             return Json(apiString);
         }
 
-        [HttpGet]       
+        [HttpGet]
         public ActionResult GetUserCredentials(IndexModel userInfo)
         {
             if (ModelState.IsValid)
@@ -89,6 +89,7 @@ namespace WeatherApp_cc.Controllers
                 var weatherInfo = service.GetWeatherInfo(Convert.ToInt16(userId));
                 Rootobject model = new Rootobject();
                 model.weatherInfo = weatherInfo;
+                model.weatherInfo = UpdateWeatherInfo(weatherInfo);
 
                 ViewData["Login"] = "Success";
                 ViewData["UserName"] = message;
@@ -114,7 +115,7 @@ namespace WeatherApp_cc.Controllers
                     ViewData["Message"] = message;
                     return View("Weather", userInfo);
                 }
-            }            
+            }
             return View("SignUp", userInfo);
         }
 
@@ -138,11 +139,31 @@ namespace WeatherApp_cc.Controllers
             return json;
         }
 
-        public int GetUserId(string userName)
+        private List<WeatherInfoModel> UpdateWeatherInfo(List<WeatherInfoModel> model)
         {
-            int u_id = 0;
-            return u_id = Convert.ToInt16(service.GetUserId(userName));
+            List<WeatherInfoModel> updatedWeather = new List<WeatherInfoModel>();
+            foreach (var item in model)
+            {
+                service = new WeatherServices(_url, item, _apiKey);
+                var requestStr = service.BuildApiRequest();
+                var json = service.GetWeatherApi(requestStr);
+                json.weather[0].City = item.City;
+                json.weather[0].State = item.State;                
+                json.weatherInfo_Obj = service.createNewJSONObj(json);
+                json.weatherInfo_Obj.id= item.id;
+                service.UpdateWeatherInfo(json.weatherInfo_Obj);    
+
+                updatedWeather.Add(json.weatherInfo_Obj);
+            }
+            return updatedWeather;
         }
 
+
+    private int GetUserId(string userName)
+    {
+        int u_id = 0;
+        return u_id = Convert.ToInt16(service.GetUserId(userName));
     }
+
+}
 }

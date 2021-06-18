@@ -148,7 +148,8 @@ namespace WeatherApp_cc.Repository
                 }
             }
             catch (MySqlException ex)
-            {                
+            {
+                ex.Message.ToString();
             }
             conn.Close();
             return userExist;
@@ -254,6 +255,36 @@ namespace WeatherApp_cc.Repository
                 ex.Message.ToString();
             }
             conn.Close();
+        }
+
+        public void UpdateWeatherInfo(WeatherInfoModel model)
+        {
+            MySqlConnection conn = null;
+            MySqlCommand command = null;
+
+            conn = new MySqlConnection();
+            command = new MySqlCommand();
+
+            conn.ConnectionString = myConnectionString;
+            try
+            {
+                conn.Open();
+                command.Connection = conn;
+                command.CommandText = "UpdateWeatherInfo";
+                command.CommandType = System.Data.CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@u_ID",model.id);
+                command.Parameters.AddWithValue("@lon", model.Longitude);
+                command.Parameters.AddWithValue("@lat",model.Latitude);
+                command.Parameters.AddWithValue("@temp",model.Temperature );
+                command.Parameters.AddWithValue("@descri", model.Description);
+                command.ExecuteNonQuery();
+            }
+            catch (MySqlException ex)
+            {
+                ex.Message.ToString();
+            }
+            conn.Close();
+
         }
         
     }
