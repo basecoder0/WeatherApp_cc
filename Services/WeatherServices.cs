@@ -16,7 +16,7 @@ namespace WeatherApp_cc.Services
         private string baseUrl;
         private string query;
         private string key;
-        private WeatherAppRepo repo = new WeatherAppRepo();   
+        private WeatherAppRepo repo = new WeatherAppRepo();
 
         public WeatherServices() { }
 
@@ -60,7 +60,7 @@ namespace WeatherApp_cc.Services
             repo.DeleteWeatherInfo(key);
         }
 
-        public Rootobject GetWeatherApi(string requestString, string city="", string state="")
+        public Rootobject GetWeatherApi(string requestString, string city = "", string state = "")
         {
             var client = new RestClient(baseUrl);
             var request = new RestRequest(requestString);
@@ -77,6 +77,13 @@ namespace WeatherApp_cc.Services
                 string rawResponse = response.Content;
                 result = JsonConvert.DeserializeObject<Rootobject>(rawResponse);
             }
+            else
+            {
+                result = new Rootobject();
+                result.ErrorMessage = response.StatusCode.ToString();
+                return result;
+            }
+
             result.weather[0].City = weatherRes.City;
             result.weather[0].State = weatherRes.State;
             return result;
@@ -98,7 +105,7 @@ namespace WeatherApp_cc.Services
         {
             return repo.GetUserId(userName);
         }
-     
+
         public List<WeatherInfoModel> GetUserSignUpLoc(int userId)
         {
             return repo.GetUserSignUpLoc(userId);

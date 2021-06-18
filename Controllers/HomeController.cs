@@ -60,14 +60,27 @@ namespace WeatherApp_cc.Controllers
         {
             string temp = "";
             var apiString = GetAPIInfo(model);
-            apiString.weather[0].City = model.weather[0].City;
-            apiString.weather[0].State = model.weather[0].State;
+            if(apiString.ErrorMessage != "NotFound")
+            {
+                apiString.weather[0].City = model.weather[0].City;
+                apiString.weather[0].State = model.weather[0].State;
 
-            temp = service.KelvinToFahrenheit(apiString.main.temp);
-            apiString.main.temp = Convert.ToDouble(temp);
-            apiString.user_id = GetUserId(model.userName);
+                temp = service.KelvinToFahrenheit(apiString.main.temp);
+                apiString.main.temp = Convert.ToDouble(temp);
+                apiString.user_id = GetUserId(model.userName);
 
-            InsertWeatherInfo(apiString);
+                var weatherInfo = service.GetWeatherInfo(Convert.ToInt16(apiString.user_id));
+                model.weatherInfo = weatherInfo;
+                if (weatherInfo != null)
+                {
+                    model.weatherInfo = UpdateWeatherInfo(weatherInfo);
+                }
+
+                InsertWeatherInfo(apiString);
+                apiString.weatherInfo = weatherInfo;
+                return Json(apiString);
+            }
+            ModelState.AddModelError("State", "Please Enter a Valid State Name");
             return Json(apiString);
         }
 
@@ -158,6 +171,8 @@ namespace WeatherApp_cc.Controllers
 
         private Rootobject GetAPIInfo(Rootobject weatherAtt)
         {
+            string requestStr;
+            Rootobject json;
             WeatherInfoModel weather = new WeatherInfoModel();
             if (weatherAtt.weather != null)
             {
@@ -171,9 +186,16 @@ namespace WeatherApp_cc.Controllers
                     weather.State = item.State;
                 }
                 service = new WeatherServices(_url, weather, _apiKey);
+                requestStr = service.BuildApiRequest();
+                json = service.GetWeatherApi(requestStr, weather.City, weather.State);
+                return json;
             }
-            var requestStr = service.BuildApiRequest();
-            var json = service.GetWeatherApi(requestStr, weather.City, weather.State);
+            requestStr = service.BuildApiRequest();
+            json = service.GetWeatherApi(requestStr);
+            if (json.ErrorMessage != null)
+            {
+                return json;
+            }
             return json;
         }
 
