@@ -1,15 +1,19 @@
 ﻿$(document).ready(function () {
     ////Shows and Hides popup window in weather view
     var stopAutoHide;
+   
+
     function showWindow() {
-        $('#main').show();
-        stopAutoHide = setTimeout(hideWindow, 5000);
+        $('#main-popup').show();
+        $('#inBox').hide();
+        stopAutoHide = setTimeout(hideWindow, 9000);
     }
 
     function hideWindow() {
-        $('#main').hide();
+        $('#main-popup').hide();
+        $('#inBox').show();
     }
-    setTimeout(showWindow, 2000);
+    setTimeout(showWindow, 1000);
 
     $("#noBtn").click(function () {
         hideWindow();

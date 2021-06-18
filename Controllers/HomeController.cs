@@ -14,7 +14,7 @@ namespace WeatherApp_cc.Controllers
     **/
     public class HomeController : Controller
     {
-        private const string _url = "";
+        private const string _url = "https://api.openweathermap.org/data/2.5/";
         private const string _apiKey = "";
         private readonly ILogger<HomeController> _logger;
         private string message = "";
@@ -165,7 +165,6 @@ namespace WeatherApp_cc.Controllers
             }
             else
             {
-
                 foreach (var item in weatherAtt.weatherInfo)
                 {
                     weather.City = item.City;

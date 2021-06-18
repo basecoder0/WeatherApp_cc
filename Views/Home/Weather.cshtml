@@ -11,7 +11,7 @@
     </div>
 }
 
-<div id="main">
+<div id="main-popup">
     <div id="pop-up">
         <h3> Would you like to get the weather for your current location?</h3>
         <p id="suppt"></p>
@@ -23,14 +23,19 @@
 </div>
 
 <div class="container">
+
     <div class="text-center">
-        <h1> Insert Some Header Text ¯\_(ツ)_/¯</h1>
+        <h1>Welcome to the weather app</h1>
+        <p>when initially signing up please consider the following formatting options</p>
+        <p><b>City</b> : please enter full city name</p>
+        <p><b>State</b> : please enter full state name</p>
     </div>
+
     <div class="top-buffer">
         @using (Html.BeginForm("GetWeather", "Home", FormMethod.Get, new { id = "weatherForm" }))
         {
             <form>
-                <div class="form-row">
+                <div class="form-row"  id="inBox">
                     <div class="col-md-5 mb-3">
                         @Html.LabelFor(m => m.weather[0].City)
                         @Html.TextBoxFor(m => m.weather[0].City, new { @class = "form-control", id = "City", placeholder = "City", required = "required" })

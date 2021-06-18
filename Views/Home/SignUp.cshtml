@@ -8,12 +8,17 @@
         <div class="text-danger">@ViewData["Message"].ToString()</div><br><br>
     </div>
 }
-
+<div class="text-center top-buffer">
+    <h1>Welcome to the weather app</h1>
+    <p>when initially signing up please consider the following formatting options</p>
+    <p><b>City</b> : please enter full city name</p>
+    <p><b>State</b> : please enter full state name</p>
+</div>
 
 @using (Html.BeginForm("PostUserInfo", "Home", FormMethod.Post))
 {
     <form>
-        <div class="form-row">
+        <div class="form-row top-buffer">
             <div class="col-md-4 mb-3">
                 @Html.LabelFor(m => m.FirstName)
                 <div class="input-group">
@@ -55,6 +60,7 @@
                 @Html.LabelFor(m => m.State)
                 <div class="input-group">
                     @Html.TextBoxFor(m => m.State, new { @class = "form-control", @placeholder = "State" })
+                    @Html.ValidationMessageFor(m => m.State, null, new { @class = "text-danger" })
                 </div>
             </div>
 
