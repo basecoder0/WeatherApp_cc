@@ -10,6 +10,15 @@
         <div class="text-success"> Welcome @ViewData["UserName"].ToString()</div><br><br>
     </div>
 }
+<div id="main">
+    <div id="pop-up">
+        <h3> Would you like to get the weather for your current location?</h3>
+        <div class="text-center">
+            <button class="btn btn-primary" type="submit" id="yesBtn">Yes</button>
+            <button class="btn btn-primary" type="submit" id="noBtn">No</button>
+        </div>
+    </div>
+</div>
 
 <div class="container">
     <div class="text-center">
@@ -96,7 +105,7 @@
                         var lon = model.coord.lon;
                         var lat = model.coord.lat;
                     }
-                    row += "<tr><td>" + name + "</td><td>" + state + "</td><td>" + temp +"\xB0F"+ "</td><td>" + description + "</td><td> <span class='table-remove'> <button id='dltBtn' class='btn btn-danger btn-rounded btn-sm my-0y' type='button' data-id=" + id + "'_'" + lon + "'_'" + lat + ">Delete</button></span></td></tr>"
+                    row += "<tr><td>" + name + "</td><td>" + state + "</td><td>" + temp + "\xB0F" + "</td><td>" + description + "</td><td> <span class='table-remove'> <button id='dltBtn' class='btn btn-danger btn-rounded btn-sm my-0y' type='button' data-id=" + id + "'_'" + lon + "'_'" + lat + ">Delete</button></span></td></tr>"
                     $('#weatherBody').append(row)
                 }
             })
@@ -116,7 +125,21 @@
 
         });
 
-    });
+        var stopAutoHide;
+        function showWindow() {
+            $('#main').show();
+            stopAutoHide = setTimeout(hideWindow, 5000);
+        }
 
+        function hideWindow() {
+            $('#main').hide();
+        }
+        setTimeout(showWindow, 2000);
+
+        $("#noBtn").click(function () {
+            hideWindow();
+            clearTimeout(stopAutoHide)
+        })
+    });
 
 </script>

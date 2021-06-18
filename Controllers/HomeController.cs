@@ -89,7 +89,7 @@ namespace WeatherApp_cc.Controllers
                 var weatherInfo = service.GetWeatherInfo(Convert.ToInt16(userId));
                 Rootobject model = new Rootobject();
                 model.weatherInfo = weatherInfo;
-                model.weatherInfo = UpdateWeatherInfo(weatherInfo);
+                //model.weatherInfo = UpdateWeatherInfo(weatherInfo);
 
                 ViewData["Login"] = "Success";
                 ViewData["UserName"] = message;
