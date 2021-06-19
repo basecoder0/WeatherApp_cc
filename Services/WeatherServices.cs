@@ -45,7 +45,9 @@ namespace WeatherApp_cc.Services
             this.baseUrl = baseUrl;
             this.key = key;
         }
-
+        /**
+         * Builds api string
+         **/
         public string BuildApiRequest()
         {
             string requestStr = "";
@@ -55,11 +57,15 @@ namespace WeatherApp_cc.Services
             return reqStr.ToString();
         }
 
+
         public void DeleteWeatherInfo(string[] key)
         {
             repo.DeleteWeatherInfo(key);
         }
 
+        /**
+         * Takes api string and calls api for weather info
+         **/
         public Rootobject GetWeatherApi(string requestString, string city = "", string state = "")
         {
             var client = new RestClient(baseUrl);
@@ -94,6 +100,10 @@ namespace WeatherApp_cc.Services
             return repo.GetUserCredentials(userInfo);
         }
 
+
+        /**
+         * Returns makeshift "key" based on user_id, longitude and latitude
+         **/
         public string[] GetKey(string id)
         {
             string[] words;
@@ -125,6 +135,9 @@ namespace WeatherApp_cc.Services
             repo.InsertWeatherInfo(model);
         }
 
+        /***
+         * Converts from kelvin to fahrenheit
+         * **/
         public string KelvinToFahrenheit(double temp)
         {
             double fahrenheit = ((temp - 273.15) * 9 / 5) + 32;
@@ -141,6 +154,10 @@ namespace WeatherApp_cc.Services
             return repo.UserExist(userName);
         }
 
+
+        /**
+         * Helper method to create new JSON obj
+         **/
         public WeatherInfoModel createNewJSONObj(Rootobject json)
         {
             WeatherInfoModel info = new WeatherInfoModel()

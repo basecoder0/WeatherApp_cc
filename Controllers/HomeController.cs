@@ -55,6 +55,12 @@ namespace WeatherApp_cc.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
+        /**
+         * Gets weather by calling GetApi to build the apistring
+         *  - Gets the weather info based on query in apistring
+         *  - Get users previous weather info records and updates them to the latest temp
+         *  - Takes recente weather inquiry and insterts into DB
+         */
         [HttpGet]
         public JsonResult GetWeather(Rootobject model)
         {
@@ -84,6 +90,11 @@ namespace WeatherApp_cc.Controllers
             return Json(apiString);
         }
 
+        /**
+         * Gets user credentials upon initial sign in
+         *  - upon loading page, all current weather records for logged in user are updated
+         **/
+
         [HttpGet]
         public ActionResult GetUserCredentials(IndexModel userInfo)
         {
@@ -111,6 +122,9 @@ namespace WeatherApp_cc.Controllers
             return Redirect("Index");
         }
 
+        /**
+         * Gets user's loctaion based on record from DB and inserts that as a weather info record
+         **/
         [HttpGet]
         public JsonResult GetUserSignUpLoc(IndexModel userInfo)
         {
@@ -128,6 +142,10 @@ namespace WeatherApp_cc.Controllers
             InsertWeatherInfo(apiString);
             return Json(apiString);
         }
+
+        /**
+         * Posts user's sign up info to DB
+         **/
 
         [HttpPost]
         public ActionResult PostUserInfo(SignUpModel userInfo)
@@ -157,6 +175,10 @@ namespace WeatherApp_cc.Controllers
             return View("SignUp", userInfo);
         }
 
+        /**
+         * Deletes weather records from DB
+         * 
+         **/
         [HttpPost]
         public void DeleteWeatherInfo(string id)
         {
@@ -164,11 +186,17 @@ namespace WeatherApp_cc.Controllers
             service.DeleteWeatherInfo(key);
         }
 
+        /**
+         * Inserts weather record 
+         **/
         private void InsertWeatherInfo(Rootobject model)
         {
             service.InsertWeatherInfo(model);
         }
 
+        /**
+        * Setups api string to be used to query api
+        **/
         private Rootobject GetAPIInfo(Rootobject weatherAtt)
         {
             string requestStr;
@@ -199,6 +227,9 @@ namespace WeatherApp_cc.Controllers
             return json;
         }
 
+        /**
+        * Updates weather record 
+        **/
         private List<WeatherInfoModel> UpdateWeatherInfo(List<WeatherInfoModel> model)
         {
             List<WeatherInfoModel> updatedWeather = new List<WeatherInfoModel>();
@@ -218,6 +249,9 @@ namespace WeatherApp_cc.Controllers
             return updatedWeather;
         }
 
+        /**
+         * Gets user id
+         **/
         private int GetUserId(string userName)
         {
             int u_id = 0;

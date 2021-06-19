@@ -15,7 +15,7 @@ namespace WeatherApp_cc.Repository
         public WeatherAppRepo() { }
         private const string myConnectionString = "";
        
-
+        //Deletes weather record based on user id, longitude and latitude of City
         public void DeleteWeatherInfo(string[] key)
         {
             MySqlConnection conn = null;
@@ -42,6 +42,7 @@ namespace WeatherApp_cc.Repository
             conn.Close();
         }
 
+        //Checks if username exists, returns username
         public string GetUserCredentials(IndexModel userInfo)
         {
             bool exists = false;
@@ -84,6 +85,7 @@ namespace WeatherApp_cc.Repository
             }
         }
 
+        //Retrieves userid 
         public string GetUserId(string userName)
         {
             DataTable dt = new DataTable();
@@ -117,6 +119,7 @@ namespace WeatherApp_cc.Repository
             return userId;
         }
 
+        // Returns bool value if user exist
         public bool UserExist(string userName)
         {
             bool userExist = false;
@@ -150,7 +153,7 @@ namespace WeatherApp_cc.Repository
             conn.Close();
             return userExist;
         }
-
+        //Gets all weather records for a user based on userid
         public List<WeatherInfoModel> GetWeatherInfo(int userId)
         {
             List<WeatherInfoModel> weatherInfo = new List<WeatherInfoModel>();
@@ -188,6 +191,7 @@ namespace WeatherApp_cc.Repository
             return weatherInfo;
         }
 
+        //Gets the user location from the initial sign-up
         public List<WeatherInfoModel> GetUserSignUpLoc(int userId)
         {
             List<WeatherInfoModel> weatherInfo = new List<WeatherInfoModel>();
@@ -225,7 +229,7 @@ namespace WeatherApp_cc.Repository
             return weatherInfo;
         }
 
-
+        //Inserts user information from signup
         public string  InsertUserInfo(SignUpModel userInfo)
         {
             MySqlConnection conn = null;
@@ -260,6 +264,7 @@ namespace WeatherApp_cc.Repository
             return success;
         }
 
+        //Inserts Weather information using user id, longitude and latitude as a "key"
         public void InsertWeatherInfo(Rootobject model)
         {
             MySqlConnection conn = null;
@@ -291,6 +296,7 @@ namespace WeatherApp_cc.Repository
             conn.Close();
         }
 
+        //Updates weather record baseed on user id, longitude and latitude
         public void UpdateWeatherInfo(WeatherInfoModel model)
         {
             MySqlConnection conn = null;

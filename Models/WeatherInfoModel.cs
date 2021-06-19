@@ -1,6 +1,7 @@
 ﻿
 namespace WeatherApp_cc.Models
 {
+    //Model to store some weather attributes
     public class WeatherInfoModel
     {
         public int id { get; set; }

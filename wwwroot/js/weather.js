@@ -1,5 +1,7 @@
 ﻿$(document).ready(function () {
 
+    // Adds new row to table based on click event
+    // calls GetWeather GET function
     $("#addBtn").click(function () {
         var model = $("#weatherForm").serialize()
         $.ajax({
@@ -29,6 +31,8 @@
         })
     })
 
+    // Deletes row from table baseed on click event
+    // calls DeleteWeatherInfo  post function
     $("#weatherBody").on('click', '#dltBtn', function () {
         var id = $(this).closest('tr');
         $.ajax({

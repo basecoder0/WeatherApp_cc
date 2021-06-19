@@ -2,6 +2,7 @@
 
 namespace WeatherApp_cc.Models
 {
+    // Model for SignUp view
     public class SignUpModel
     {        
         [Display(Name = "First Name")]
