@@ -72,7 +72,7 @@ namespace WeatherApp_cc.Models
         [Required]
         [Display(Name = "City")]
         public string City { get; set; }
-        [Required]
+        
         [Display(Name = "State")]
         public string State { get; set; }
     }
