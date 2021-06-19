@@ -10,14 +10,13 @@ namespace WeatherApp_cc.Models
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
-        [Required]
+       
         [Display(Name = "UserName")]
         public string UserName { get; set; }
-
-        [Required(ErrorMessage = "City Required")]        
+               
         [Display(Name = "City")]
         public string City { get; set; }
-        
+       
         [Display(Name = "State")]
         public string State { get; set; }
        
