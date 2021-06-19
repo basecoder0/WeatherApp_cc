@@ -25,7 +25,9 @@ namespace WeatherApp_cc
                         {
                             pro.SetValue(objT, row[pro.Name]);
                         }
-                        catch (Exception ex) { }
+                        catch (Exception ex) {
+                            ex.Message.ToLower();
+                        }
                     }
                 }
                 return objT;

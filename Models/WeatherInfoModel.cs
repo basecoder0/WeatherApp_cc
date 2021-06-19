@@ -4,7 +4,7 @@ namespace WeatherApp_cc.Models
     //Model to store some weather attributes
     public class WeatherInfoModel
     {
-        public int id { get; set; }
+        public int Id { get; set; }
         public string City { get; set;}
         public string State { get; set; }
         public double Temperature { get; set; }

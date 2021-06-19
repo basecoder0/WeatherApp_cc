@@ -36,21 +36,21 @@
             <form>
                 <div class="form-row"  id="inBox">
                     <div class="col-md-5 mb-3">
-                        @Html.LabelFor(m => m.weather[0].City)
-                        @Html.TextBoxFor(m => m.weather[0].City, new { @class = "form-control", id = "City", placeholder = "City", required = "required" })
-                        @Html.ValidationMessageFor(m => m.weather[0].City)
+                        @Html.LabelFor(m => m.Weather[0].City)
+                        @Html.TextBoxFor(m => m.Weather[0].City, new { @class = "form-control", id = "City", placeholder = "City", required = "required" })
+                        @Html.ValidationMessageFor(m => m.Weather[0].City)
                     </div>
                     <div class="col-md-5 mb-3">
-                        @Html.LabelFor(m => m.weather[0].State)
-                        @Html.TextBoxFor(m => m.weather[0].State, new { @class = "form-control", id = "State", placeholder = "State" })
-                        @Html.ValidationMessageFor(m => m.weather[0].State)
+                        @Html.LabelFor(m => m.Weather[0].State)
+                        @Html.TextBoxFor(m => m.Weather[0].State, new { @class = "form-control", id = "State", placeholder = "State" })
+                        @Html.ValidationMessageFor(m => m.Weather[0].State)
                     </div>
                     
                     <div class="col-md-2 mb-3 align-self-end">
                         <button class="btn btn-md btn-success" id="addBtn" type="button">+ Add New Location</button>
                     </div>
                 </div>
-                @Html.HiddenFor(m => m.userName, new { id = "userName", Value = @ViewData["UserName"].ToString() })
+                @Html.HiddenFor(m => m.UserName, new { id = "userName", Value = @ViewData["UserName"].ToString() })
             </form>
         }
     </div>
@@ -58,7 +58,7 @@
         var data = (Rootobject)ViewData["WeatherAtt"];
     }
     <div class="top-buffer">
-        @if (Model.weatherInfo != null)
+        @if (Model.WeatherInfo != null)
         {
             <table class="table align-middle table-bordered">
                 <thead>
@@ -71,7 +71,7 @@
                     </tr>
                 </thead>
                 <tbody id="weatherBody">
-                    @foreach (var items in Model.weatherInfo)
+                    @foreach (var items in Model.WeatherInfo)
                     {
                         <tr>
                             <td>@items.City</td>
@@ -80,7 +80,7 @@
                             <td>@items.WeatherDescription</td>
                             <td>
                                 <span class="table-remove">
-                                    <button id="dltBtn" class="btn btn-danger btn-rounded btn-sm my-0y" type="button" data-id="@items.id'_'@items.Longitude'_'@items.Latitude">Delete</button>
+                                    <button id="dltBtn" class="btn btn-danger btn-rounded btn-sm my-0y" type="button" data-id="@items.Id'_'@items.Longitude'_'@items.Latitude">Delete</button>
                                 </span>
                             </td>
                         </tr>

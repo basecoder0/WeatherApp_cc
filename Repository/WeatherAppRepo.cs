@@ -13,7 +13,7 @@ namespace WeatherApp_cc.Repository
     public class WeatherAppRepo
     {
         public WeatherAppRepo() { }
-        private const string myConnectionString = "";
+        private const string _myConnectionString = "";
        
         //Deletes weather record based on user id, longitude and latitude of City
         public void DeleteWeatherInfo(string[] key)
@@ -23,13 +23,13 @@ namespace WeatherApp_cc.Repository
 
             conn = new MySqlConnection();
             command = new MySqlCommand();
-            conn.ConnectionString = myConnectionString;
+            conn.ConnectionString = _myConnectionString;
             try
             {               
                 conn.Open();
                 command.Connection = conn;
                 command.CommandText = "DeleteWeatherInfo";
-                command.CommandType = System.Data.CommandType.StoredProcedure;
+                command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue("@u_id", Convert.ToInt16(key[0]));
                 command.Parameters.AddWithValue("@lon", decimal.Parse(key[1].ToString()));
                 command.Parameters.AddWithValue("@lat", decimal.Parse(key[2].ToString()));
@@ -54,13 +54,13 @@ namespace WeatherApp_cc.Repository
             conn = new MySqlConnection();
             command = new MySqlCommand();
 
-            conn.ConnectionString = myConnectionString;
+            conn.ConnectionString = _myConnectionString;
             try
             {
                 conn.Open();
                 command.Connection = conn;
                 command.CommandText = "GetUserCredentials";
-                command.CommandType = System.Data.CommandType.StoredProcedure;
+                command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue("@u_Name", userInfo.UserName);
 
                 var result = command.ExecuteScalar();
@@ -96,13 +96,13 @@ namespace WeatherApp_cc.Repository
             conn = new MySqlConnection();
             command = new MySqlCommand();
 
-            conn.ConnectionString = myConnectionString;
+            conn.ConnectionString = _myConnectionString;
             try
             {
                 conn.Open();
                 command.Connection = conn;
                 command.CommandText = "GetUserId";
-                command.CommandType = System.Data.CommandType.StoredProcedure;
+                command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue("@u_Name", userName);
               
                 dt.Load(command.ExecuteReader());
@@ -131,13 +131,13 @@ namespace WeatherApp_cc.Repository
             conn = new MySqlConnection();
             command = new MySqlCommand();
 
-            conn.ConnectionString = myConnectionString;
+            conn.ConnectionString = _myConnectionString;
             try
             {
                 conn.Open();
                 command.Connection = conn;
                 command.CommandText = "GetUserId";
-                command.CommandType = System.Data.CommandType.StoredProcedure;
+                command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue("@u_Name", userName);
 
                 dt.Load(command.ExecuteReader());
@@ -163,13 +163,13 @@ namespace WeatherApp_cc.Repository
             conn = new MySqlConnection();
             command = new MySqlCommand();
 
-            conn.ConnectionString = myConnectionString;
+            conn.ConnectionString = _myConnectionString;
             try
             {
                 conn.Open();
                 command.Connection = conn;
                 command.CommandText = "GetWeatherInfo";
-                command.CommandType = System.Data.CommandType.StoredProcedure;
+                command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue("@u_id", userId);               
                 command.ExecuteNonQuery();
                
@@ -201,13 +201,13 @@ namespace WeatherApp_cc.Repository
             conn = new MySqlConnection();
             command = new MySqlCommand();
 
-            conn.ConnectionString = myConnectionString;
+            conn.ConnectionString = _myConnectionString;
             try
             {
                 conn.Open();
                 command.Connection = conn;
                 command.CommandText = "GetUserSignUpLoc";
-                command.CommandType = System.Data.CommandType.StoredProcedure;
+                command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue("@u_id", userId);
                 command.ExecuteNonQuery();
 
@@ -238,14 +238,14 @@ namespace WeatherApp_cc.Repository
             conn = new MySqlConnection();
             command = new MySqlCommand();
 
-            conn.ConnectionString = myConnectionString;
+            conn.ConnectionString = _myConnectionString;
             try
             {              
                 conn.Open();
                 command.Connection = conn;
 
                 command.CommandText = "InsertUserInfo";
-                command.CommandType = System.Data.CommandType.StoredProcedure;
+                command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue("@u_Name", userInfo.UserName);
                 command.Parameters.AddWithValue("@f_Name", userInfo.FirstName);
                 command.Parameters.AddWithValue("@l_Name", userInfo.LastName);
@@ -273,20 +273,20 @@ namespace WeatherApp_cc.Repository
             conn = new MySqlConnection();
             command = new MySqlCommand();
 
-            conn.ConnectionString = myConnectionString;
+            conn.ConnectionString = _myConnectionString;
             try
             {
                 conn.Open();
                 command.Connection = conn;
                 command.CommandText = "InsertWeatherInfo";
-                command.CommandType = System.Data.CommandType.StoredProcedure;
-                command.Parameters.AddWithValue("@u_ID", model.user_id);
-                command.Parameters.AddWithValue("@lon", model.coord.lon);
-                command.Parameters.AddWithValue("@lat", model.coord.lat);
-                command.Parameters.AddWithValue("@city", model.weather[0].City);
-                command.Parameters.AddWithValue("@state", model.weather[0].State);               
-                command.Parameters.AddWithValue("@temp", model.main.temp);
-                command.Parameters.AddWithValue("@descri", model.weather[0].description);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@u_ID", model.User_id);
+                command.Parameters.AddWithValue("@lon", model.Coord.Lon);
+                command.Parameters.AddWithValue("@lat", model.Coord.Lat);
+                command.Parameters.AddWithValue("@city", model.Weather[0].City);
+                command.Parameters.AddWithValue("@state", model.Weather[0].State);               
+                command.Parameters.AddWithValue("@temp", model.Main.Temp);
+                command.Parameters.AddWithValue("@descri", model.Weather[0].Description);
                 command.ExecuteNonQuery();
             }
             catch (MySqlException ex)
@@ -305,14 +305,14 @@ namespace WeatherApp_cc.Repository
             conn = new MySqlConnection();
             command = new MySqlCommand();
 
-            conn.ConnectionString = myConnectionString;
+            conn.ConnectionString = _myConnectionString;
             try
             {
                 conn.Open();
                 command.Connection = conn;
                 command.CommandText = "UpdateWeatherInfo";
-                command.CommandType = System.Data.CommandType.StoredProcedure;
-                command.Parameters.AddWithValue("@u_ID",model.id);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@u_ID",model.Id);
                 command.Parameters.AddWithValue("@lon", model.Longitude);
                 command.Parameters.AddWithValue("@lat",model.Latitude);
                 command.Parameters.AddWithValue("@temp",model.Temperature );

@@ -17,8 +17,8 @@ namespace WeatherApp_cc.Controllers
         private const string _url = "https://api.openweathermap.org/data/2.5/";
         private const string _apiKey = "";
         private readonly ILogger<HomeController> _logger;
-        private string message = "";
-        WeatherServices service = new WeatherServices();
+        private string _message = "";
+        private WeatherServices _service = new WeatherServices();
 
         public HomeController(ILogger<HomeController> logger)
         {
@@ -68,22 +68,22 @@ namespace WeatherApp_cc.Controllers
             var apiString = GetAPIInfo(model);
             if(apiString.ErrorMessage != "NotFound")
             {
-                apiString.weather[0].City = model.weather[0].City;
-                apiString.weather[0].State = model.weather[0].State;
+                apiString.Weather[0].City = model.Weather[0].City;
+                apiString.Weather[0].State = model.Weather[0].State;
 
-                temp = service.KelvinToFahrenheit(apiString.main.temp);
-                apiString.main.temp = Convert.ToDouble(temp);
-                apiString.user_id = GetUserId(model.userName);
+                temp = _service.KelvinToFahrenheit(apiString.Main.Temp);
+                apiString.Main.Temp = Convert.ToDouble(temp);
+                apiString.User_id = GetUserId(model.UserName);
 
-                var weatherInfo = service.GetWeatherInfo(Convert.ToInt16(apiString.user_id));
-                model.weatherInfo = weatherInfo;
+                var weatherInfo = _service.GetWeatherInfo(Convert.ToInt16(apiString.User_id));
+                model.WeatherInfo = weatherInfo;
                 if (weatherInfo != null)
                 {
-                    model.weatherInfo = UpdateWeatherInfo(weatherInfo);
+                    model.WeatherInfo = UpdateWeatherInfo(weatherInfo);
                 }
 
                 InsertWeatherInfo(apiString);
-                apiString.weatherInfo = weatherInfo;
+                apiString.WeatherInfo = weatherInfo;
                 return Json(apiString);
             }
             ModelState.AddModelError("State", "Please Enter a Valid State Name");
@@ -100,23 +100,23 @@ namespace WeatherApp_cc.Controllers
         {
             if (ModelState.IsValid)
             {
-                var userExist = service.UserExist(userInfo.UserName);
+                var userExist = _service.UserExist(userInfo.UserName);
                 if (!userExist)
                 {
                     ModelState.AddModelError("UserName", "Please Enter a Valid User Name");
                     return View("Index", userInfo);
                 }
-                message = service.GetUserCredentials(userInfo);
-                string userId = service.GetUserId(userInfo.UserName);
-                var weatherInfo = service.GetWeatherInfo(Convert.ToInt16(userId));
+                _message = _service.GetUserCredentials(userInfo);
+                string userId = _service.GetUserId(userInfo.UserName);
+                var weatherInfo = _service.GetWeatherInfo(Convert.ToInt16(userId));
                 Rootobject model = new Rootobject();
-                model.weatherInfo = weatherInfo;
+                model.WeatherInfo = weatherInfo;
                 if (weatherInfo != null)
                 {
-                    model.weatherInfo = UpdateWeatherInfo(weatherInfo);
+                    model.WeatherInfo = UpdateWeatherInfo(weatherInfo);
                 }
                 ViewData["Login"] = "Success";
-                ViewData["UserName"] = message;
+                ViewData["UserName"] = _message;
                 return View("Weather", model);
             }
             return Redirect("Index");
@@ -131,13 +131,13 @@ namespace WeatherApp_cc.Controllers
             Rootobject model = new Rootobject();
             string temp = "";
 
-            string userId = service.GetUserId(userInfo.UserName);
-            var weatherInfo = service.GetUserSignUpLoc(Convert.ToInt16(userId));
-            model.weatherInfo = weatherInfo;
+            string userId = _service.GetUserId(userInfo.UserName);
+            var weatherInfo = _service.GetUserSignUpLoc(Convert.ToInt16(userId));
+            model.WeatherInfo = weatherInfo;
             var apiString = GetAPIInfo(model);
-            temp = service.KelvinToFahrenheit(apiString.main.temp);
-            apiString.main.temp = Convert.ToDouble(temp);
-            apiString.user_id = Convert.ToInt16(userId);
+            temp = _service.KelvinToFahrenheit(apiString.Main.Temp);
+            apiString.Main.Temp = Convert.ToDouble(temp);
+            apiString.User_id = Convert.ToInt16(userId);
 
             InsertWeatherInfo(apiString);
             return Json(apiString);
@@ -150,7 +150,7 @@ namespace WeatherApp_cc.Controllers
         [HttpPost]
         public ActionResult PostUserInfo(SignUpModel userInfo)
         {
-            var userExist = service.UserExist(userInfo.UserName);
+            var userExist = _service.UserExist(userInfo.UserName);
             if (userExist)
             {
                 ModelState.AddModelError("UserName", "User Name already exists");
@@ -158,16 +158,16 @@ namespace WeatherApp_cc.Controllers
             }
             else
             {
-                message = service.InsertUserInfo(userInfo);
+                _message = _service.InsertUserInfo(userInfo);
 
-                if (message == "Success" && ModelState.IsValid)
+                if (_message == "Success" && ModelState.IsValid)
                 {
                     ViewData["Login"] = "Success";
-                    ViewData["Message"] = message;
+                    ViewData["Message"] = _message;
                     ViewData["UserName"] = userInfo.UserName;
 
                     Rootobject userObj = new Rootobject();
-                    userObj.signUpModel = userInfo;
+                    userObj.SignUpModel = userInfo;
 
                     return View("Weather", userObj);
                 }
@@ -182,8 +182,8 @@ namespace WeatherApp_cc.Controllers
         [HttpPost]
         public void DeleteWeatherInfo(string id)
         {
-            string[] key = service.GetKey(id);
-            service.DeleteWeatherInfo(key);
+            string[] key = _service.GetKey(id);
+            _service.DeleteWeatherInfo(key);
         }
 
         /**
@@ -191,7 +191,7 @@ namespace WeatherApp_cc.Controllers
          **/
         private void InsertWeatherInfo(Rootobject model)
         {
-            service.InsertWeatherInfo(model);
+            _service.InsertWeatherInfo(model);
         }
 
         /**
@@ -202,24 +202,24 @@ namespace WeatherApp_cc.Controllers
             string requestStr;
             Rootobject json;
             WeatherInfoModel weather = new WeatherInfoModel();
-            if (weatherAtt.weather != null)
+            if (weatherAtt.Weather != null)
             {
-                service = new WeatherServices(_url, weatherAtt, _apiKey);
+                _service = new WeatherServices(_url, weatherAtt, _apiKey);
             }
             else
             {
-                foreach (var item in weatherAtt.weatherInfo)
+                foreach (var item in weatherAtt.WeatherInfo)
                 {
                     weather.City = item.City;
                     weather.State = item.State;
                 }
-                service = new WeatherServices(_url, weather, _apiKey);
-                requestStr = service.BuildApiRequest();
-                json = service.GetWeatherApi(requestStr, weather.City, weather.State);
+                _service = new WeatherServices(_url, weather, _apiKey);
+                requestStr = _service.BuildApiRequest();
+                json = _service.GetWeatherApi(requestStr, weather.City, weather.State);
                 return json;
             }
-            requestStr = service.BuildApiRequest();
-            json = service.GetWeatherApi(requestStr);
+            requestStr = _service.BuildApiRequest();
+            json = _service.GetWeatherApi(requestStr);
             if (json.ErrorMessage != null)
             {
                 return json;
@@ -235,16 +235,16 @@ namespace WeatherApp_cc.Controllers
             List<WeatherInfoModel> updatedWeather = new List<WeatherInfoModel>();
             foreach (var item in model)
             {
-                service = new WeatherServices(_url, item, _apiKey);
-                var requestStr = service.BuildApiRequest();
-                var json = service.GetWeatherApi(requestStr);
-                json.weather[0].City = item.City;
-                json.weather[0].State = item.State;
-                json.weatherInfo_Obj = service.createNewJSONObj(json);
-                json.weatherInfo_Obj.id = item.id;
-                service.UpdateWeatherInfo(json.weatherInfo_Obj);
+                _service = new WeatherServices(_url, item, _apiKey);
+                var requestStr = _service.BuildApiRequest();
+                var json = _service.GetWeatherApi(requestStr);
+                json.Weather[0].City = item.City;
+                json.Weather[0].State = item.State;
+                json.WeatherInfo_Obj = _service.CreateNewJSONObj(json);
+                json.WeatherInfo_Obj.Id = item.Id;
+                _service.UpdateWeatherInfo(json.WeatherInfo_Obj);
 
-                updatedWeather.Add(json.weatherInfo_Obj);
+                updatedWeather.Add(json.WeatherInfo_Obj);
             }
             return updatedWeather;
         }
@@ -255,7 +255,7 @@ namespace WeatherApp_cc.Controllers
         private int GetUserId(string userName)
         {
             int u_id = 0;
-            return u_id = Convert.ToInt16(service.GetUserId(userName));
+            return u_id = Convert.ToInt16(_service.GetUserId(userName));
         }
 
     }

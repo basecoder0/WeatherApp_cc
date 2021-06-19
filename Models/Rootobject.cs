@@ -5,70 +5,70 @@ namespace WeatherApp_cc.Models
 {
     public class Rootobject
     {
-        public List<WeatherInfoModel> weatherInfo { get; set; }
-        public WeatherInfoModel weatherInfo_Obj{ get; set; }
-        public SignUpModel signUpModel { get; set; }
-        public int user_id { get; set; }
-        public string userName { get; set; }
-        public Coord coord { get; set; }
-        public Weather[] weather { get; set; }
-        public string _base { get; set; }
-        public Main main { get; set; }
-        public int visibility { get; set; }
-        public Wind wind { get; set; }
-        public Clouds clouds { get; set; }
-        public int dt { get; set; }
-        public Sys sys { get; set; }
-        public int timezone { get; set; }
-        public int id { get; set; }
-        public string name { get; set; }
-        public int cod { get; set; }
+        public List<WeatherInfoModel> WeatherInfo { get; set; }
+        public WeatherInfoModel WeatherInfo_Obj{ get; set; }
+        public SignUpModel SignUpModel { get; set; }
+        public int User_id { get; set; }
+        public string UserName { get; set; }
+        public Coord Coord { get; set; }
+        public Weather[] Weather { get; set; }
+        public string _Base { get; set; }
+        public Main Main { get; set; }
+        public int Visibility { get; set; }
+        public Wind Wind { get; set; }
+        public Clouds Clouds { get; set; }
+        public int Dt { get; set; }
+        public Sys Sys { get; set; }
+        public int Timezone { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public int Cod { get; set; }
         public string ErrorMessage { get; set; }
     }
 
     public class Coord
     {
-        public decimal lon { get; set; }
-        public decimal lat { get; set; }
+        public decimal Lon { get; set; }
+        public decimal Lat { get; set; }
     }
 
     public class Main
     {
-        public double temp { get; set; }
-        public float feels_like { get; set; }
-        public float temp_min { get; set; }
-        public float temp_max { get; set; }
-        public int pressure { get; set; }
-        public int humidity { get; set; }
+        public double Temp { get; set; }
+        public float Feels_like { get; set; }
+        public float Temp_min { get; set; }
+        public float Temp_max { get; set; }
+        public int Pressure { get; set; }
+        public int Humidity { get; set; }
     }
 
     public class Wind
     {
-        public float speed { get; set; }
-        public int deg { get; set; }
+        public float Speed { get; set; }
+        public int Deg { get; set; }
     }
 
     public class Clouds
     {
-        public int all { get; set; }
+        public int All { get; set; }
     }
 
     public class Sys
     {
-        public int type { get; set; }
-        public int id { get; set; }
-        public float message { get; set; }
-        public string country { get; set; }
-        public int sunrise { get; set; }
-        public int sunset { get; set; }
+        public int Type { get; set; }
+        public int Id { get; set; }
+        public float Message { get; set; }
+        public string Country { get; set; }
+        public int Sunrise { get; set; }
+        public int Sunset { get; set; }
     }
 
     public class Weather
     {
-        public int id { get; set; }
-        public string main { get; set; }
-        public string description { get; set; }
-        public string icon { get; set; }
+        public int Id { get; set; }
+        public string Main { get; set; }
+        public string Description { get; set; }
+        public string Icon { get; set; }
         [Required]
         [Display(Name = "City")]
         public string City { get; set; }

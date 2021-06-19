@@ -13,37 +13,37 @@ namespace WeatherApp_cc.Services
     **/
     public class WeatherServices
     {
-        private string baseUrl;
-        private string query;
-        private string key;
-        private WeatherAppRepo repo = new WeatherAppRepo();
+        private  string _baseUrl;
+        private string _query;
+        private string _key;
+        private WeatherAppRepo _repo = new WeatherAppRepo();
 
         public WeatherServices() { }
 
         public WeatherServices(string baseUrl, WeatherInfoModel model, string key)
         {
             if (model.City != "" && model.State != "")
-                this.query = model.City + "," + model.State;
+                this._query = model.City + "," + model.State;
             else if (model.City != "")
-                this.query = model.City;
+                this._query = model.City;
             else if (model.State != "")
-                this.query = model.State;
+                this._query = model.State;
 
-            this.baseUrl = baseUrl;
-            this.key = key;
+            this._baseUrl = baseUrl;
+            this._key = key;
         }
 
         public WeatherServices(string baseUrl, Rootobject model, string key)
         {
-            if (model.weather[0].City != "" && model.weather[0].State != "")
-                this.query = model.weather[0].City + "," + model.weather[0].State;
-            else if (model.weather[0].City != "")
-                this.query = model.weather[0].City;
-            else if (model.weather[0].State != "")
-                this.query = model.weather[0].State;
+            if (model.Weather[0].City != "" && model.Weather[0].State != "")
+                this._query = model.Weather[0].City + "," + model.Weather[0].State;
+            else if (model.Weather[0].City != "")
+                this._query = model.Weather[0].City;
+            else if (model.Weather[0].State != "")
+                this._query = model.Weather[0].State;
 
-            this.baseUrl = baseUrl;
-            this.key = key;
+            this._baseUrl = baseUrl;
+            this._key = key;
         }
         /**
          * Builds api string
@@ -53,14 +53,13 @@ namespace WeatherApp_cc.Services
             string requestStr = "";
             string qStr = "weather?q=";
             StringBuilder reqStr = new StringBuilder();
-            reqStr.AppendFormat(requestStr + "{0}{1}{2}", qStr, query, key);
+            reqStr.AppendFormat(requestStr + "{0}{1}{2}", qStr, _query, _key);
             return reqStr.ToString();
         }
 
-
         public void DeleteWeatherInfo(string[] key)
         {
-            repo.DeleteWeatherInfo(key);
+            _repo.DeleteWeatherInfo(key);
         }
 
         /**
@@ -68,7 +67,7 @@ namespace WeatherApp_cc.Services
          **/
         public Rootobject GetWeatherApi(string requestString, string city = "", string state = "")
         {
-            var client = new RestClient(baseUrl);
+            var client = new RestClient(_baseUrl);
             var request = new RestRequest(requestString);
             var response = client.Execute(request);
             Rootobject result = null;
@@ -90,16 +89,15 @@ namespace WeatherApp_cc.Services
                 return result;
             }
 
-            result.weather[0].City = weatherRes.City;
-            result.weather[0].State = weatherRes.State;
+            result.Weather[0].City = weatherRes.City;
+            result.Weather[0].State = weatherRes.State;
             return result;
         }
 
         public string GetUserCredentials(IndexModel userInfo)
         {
-            return repo.GetUserCredentials(userInfo);
+            return _repo.GetUserCredentials(userInfo);
         }
-
 
         /**
          * Returns makeshift "key" based on user_id, longitude and latitude
@@ -113,26 +111,26 @@ namespace WeatherApp_cc.Services
 
         public string GetUserId(string userName)
         {
-            return repo.GetUserId(userName);
+            return _repo.GetUserId(userName);
         }
 
         public List<WeatherInfoModel> GetUserSignUpLoc(int userId)
         {
-            return repo.GetUserSignUpLoc(userId);
+            return _repo.GetUserSignUpLoc(userId);
         }
         public List<WeatherInfoModel> GetWeatherInfo(int userId)
         {
-            return repo.GetWeatherInfo(userId);
+            return _repo.GetWeatherInfo(userId);
         }
 
         public string InsertUserInfo(SignUpModel userInfo)
         {
-            return repo.InsertUserInfo(userInfo);
+            return _repo.InsertUserInfo(userInfo);
         }
 
         public void InsertWeatherInfo(Rootobject model)
         {
-            repo.InsertWeatherInfo(model);
+            _repo.InsertWeatherInfo(model);
         }
 
         /***
@@ -146,31 +144,29 @@ namespace WeatherApp_cc.Services
 
         public void UpdateWeatherInfo(WeatherInfoModel model)
         {
-            repo.UpdateWeatherInfo(model);
+            _repo.UpdateWeatherInfo(model);
         }
 
         public bool UserExist(string userName)
         {
-            return repo.UserExist(userName);
+            return _repo.UserExist(userName);
         }
-
 
         /**
          * Helper method to create new JSON obj
          **/
-        public WeatherInfoModel createNewJSONObj(Rootobject json)
+        public WeatherInfoModel CreateNewJSONObj(Rootobject json)
         {
             WeatherInfoModel info = new WeatherInfoModel()
             {
-
-                City = json.weather[0].City,
-                State = json.weather[0].State,
-                Latitude = json.coord.lat,
-                Longitude = json.coord.lon,
-                WeatherDescription = json.weather[0].description,
+                City = json.Weather[0].City,
+                State = json.Weather[0].State,
+                Latitude = json.Coord.Lat,
+                Longitude = json.Coord.Lon,
+                WeatherDescription = json.Weather[0].Description,
 
             };
-            var temp = KelvinToFahrenheit(json.main.temp);
+            var temp = KelvinToFahrenheit(json.Main.Temp);
             info.Temperature = Convert.ToDouble(temp);
             return info;
         }
