@@ -13,7 +13,11 @@
                 if (model != null && model.errorMessage != "NotFound") {
                     var row = "";
                     var name = model.name;
-                    var state = model.weather[0].state;
+                    if (model.weather[0].state != null) {
+                        var state = model.weather[0].state;
+                    } else {
+                        var state = 'NA';
+                    }                    
                     var temp = model.main.temp;
                     var description = model.weather[0].description;
                     var id = model.user_id;
